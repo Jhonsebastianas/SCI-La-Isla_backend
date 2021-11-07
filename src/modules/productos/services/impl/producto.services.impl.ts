@@ -22,8 +22,8 @@ export class ProductoServiceImpl implements ProductoService {
     }
 
     async findDetalleProductoById(idProducto: number): Promise<DetalleProductoOutDTO> {
-        const detalle = await this.productoRepository.createQueryBuilder().where(
-            "idProducto = :id", { "id": idProducto }
+        const detalle: DetalleProductoOutDTO = await this.productoRepository.createQueryBuilder().where(
+            "id_producto = :id", { "id": idProducto }
         ).getOne();
         if (!detalle) {
             throw new HttpException({ mensaje: `El producto con identificación ${idProducto} no existe`, status: HttpStatus.BAD_REQUEST }, HttpStatus.BAD_REQUEST);
