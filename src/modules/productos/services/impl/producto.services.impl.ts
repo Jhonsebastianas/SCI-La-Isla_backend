@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { InjectEntityManager } from "@nestjs/typeorm";
+import { MagicNumber } from "src/modules/common/util/constantes";
+import { EntityManager } from "typeorm";
 import { DetalleProductoOutDTO } from "../../models/dto/detalle.producto.out.dto";
 import { ProductoEntity } from "../../models/entity/producto.entity";
 import { ProductoService } from "../producto.services";
@@ -10,21 +11,30 @@ import { ProductoService } from "../producto.services";
  */
 export class ProductoServiceImpl implements ProductoService {
 
-    constructor(@InjectRepository(ProductoEntity)
-    private productoRepository: Repository<ProductoEntity>) { }
+    constructor(@InjectEntityManager()
+    private entityManager: EntityManager) { }
 
     async insert(producto: ProductoEntity): Promise<ProductoEntity> {
-        return await this.productoRepository.save(producto);
+        const newProduct = new ProductoEntity();
+        Object.assign(newProduct, producto);
+
+        return await this.entityManager.save(newProduct);
     }
 
     async update(producto: ProductoEntity): Promise<ProductoEntity> {
-        return await this.productoRepository.save(producto);
+        return await this.entityManager.save(producto);
     }
 
     async findDetalleProductoById(idProducto: number): Promise<DetalleProductoOutDTO> {
-        const detalle: DetalleProductoOutDTO = await this.productoRepository.createQueryBuilder().where(
-            "id_producto = :id", { "id": idProducto }
-        ).getOne();
+        const detalle: DetalleProductoOutDTO = await this.entityManager.query(`
+            SELECT 
+                pro.nombre AS "nombreProducto", pro.stock AS "stock",
+                pro.precio_compra AS "precioCompra", pro.precio_venta AS "precioVenta",
+                cpro.nombre AS "categoria"
+            FROM producto pro
+            INNER JOIN categoria_producto cpro ON pro.id_categoria_producto = cpro.id_categoria_producto
+            WHERE pro.id_producto = :idProducto
+        `, [idProducto]).then((detalles => detalles[MagicNumber.CERO]));
         if (!detalle) {
             throw new HttpException({ mensaje: `El producto con identificación ${idProducto} no existe`, status: HttpStatus.BAD_REQUEST }, HttpStatus.BAD_REQUEST);
         }
