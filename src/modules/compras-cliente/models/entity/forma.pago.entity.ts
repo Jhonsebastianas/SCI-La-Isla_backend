@@ -1,12 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity("FORMA_PAGO")
 export class FormaPago {
 
     @PrimaryGeneratedColumn()
+    @PrimaryColumn({ name: "ID_FORMA_PAGO" })
     idFormaPago: number;
 
-    @Column()
+    @Column({ name: "NOMBRE" })
     nombre: string;
-    
+
+    @Column({ name: "ACTIVO" })
+    activo: string;
+
 }

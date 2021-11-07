@@ -1,13 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { ProductoEntity } from './producto.entity';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity()
+@Entity("CATEGORIA_PRODUCTO")
 export class CategoriaProductoEntity {
 
     @PrimaryGeneratedColumn()
+    @PrimaryColumn({ name: "ID_CATEGORIA_PRODUCTO" })
     idCategoriaProducto: number;
 
-    @Column()
+    @Column({ name: "NOMBRE" })
     nombre: string;
 
 }
