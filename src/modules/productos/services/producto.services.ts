@@ -1,5 +1,5 @@
-import { DetalleProductoOutDTO } from '../models/dto/detalle.producto.out.dto';
-import { ProductoEntity } from '../models/entity/producto.entity';
+import { DetalleProductoOutDTO } from '@productos/models/dto/detalle.producto.out.dto';
+import { ProductoEntity } from '@productos/models/entity/producto.entity';
 
 export interface ProductoService {
 

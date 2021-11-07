@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CategoriaProductoEntity } from '../models/entity/categoria.producto.entity';
-import { CategoriaProductoServiceImpl } from '../services/impl/categoria.producto.services.impl';
+import { CategoriaProductoEntity } from '@productos/models/entity/categoria.producto.entity';
+import { CategoriaProductoServiceImpl } from '@productos/services/impl/categoria.producto.services.impl';
 
 @Controller("categoria-producto")
 export class CategoriaProductoController {

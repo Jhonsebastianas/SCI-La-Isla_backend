@@ -1,4 +1,4 @@
-import { CategoriaProductoEntity } from "../models/entity/categoria.producto.entity";
+import { CategoriaProductoEntity } from "@productos/models/entity/categoria.producto.entity";
 
 export interface CategoriaProductoService {
 

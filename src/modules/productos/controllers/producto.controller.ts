@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Module, Param, ParseIntPipe, Post } from '@nestjs/common';
-import { DetalleProductoOutDTO } from '../models/dto/detalle.producto.out.dto';
-import { ProductoEntity } from '../models/entity/producto.entity';
-import { ProductoServiceImpl } from '../services/impl/producto.services.impl';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { DetalleProductoOutDTO } from '@productos/models/dto/detalle.producto.out.dto';
+import { ProductoEntity } from '@productos/models/entity/producto.entity';
+import { ProductoServiceImpl } from '@productos/services/impl/producto.services.impl';
 
 @Controller("producto")
 export class ProductoController {

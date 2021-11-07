@@ -5,6 +5,11 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "_moduleAliases": {
+    "@commons": "dist/modules/commons",
+    "@productos/": "dist/modules/productos",
+    "@compras.clientes/": "dist/modules/compras-clientes"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -32,6 +37,7 @@
     "mocha": "^7.1.0",
     "mocha-junit-reporter": "^1.23.3",
     "mocha-multi-reporters": "^1.1.7",
+    "module-alias": "^2.2.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

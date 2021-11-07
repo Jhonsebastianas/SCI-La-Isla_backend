@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
-import { MagicNumber } from "src/modules/common/util/constantes";
+import { MagicNumber } from '@commons/util/constantes'
 import { EntityManager } from "typeorm";
-import { DetalleProductoOutDTO } from "../../models/dto/detalle.producto.out.dto";
-import { ProductoEntity } from "../../models/entity/producto.entity";
-import { ProductoService } from "../producto.services";
+import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
+import { ProductoEntity } from "@productos/models/entity/producto.entity";
+import { ProductoService } from "@productos/services/producto.services";
 
 /**
  * Servicio encargado de la lógica de negocio y capa de datos.

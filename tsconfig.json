@@ -10,6 +10,11 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@productos/*": ["src/modules/productos/*"],
+      "@compras.clientes/*": ["src/modules/compras-clientes/*"],
+      "@commons/*": ["src/modules/commons/*"]
+    },
     "incremental": true,
     "skipLibCheck": true
   }
