@@ -41,4 +41,21 @@ export class ProductoServiceImpl implements ProductoService {
         return detalle;
     }
 
+    async findDetalleProductoLikeNombre(nombre: string): Promise<DetalleProductoOutDTO[]> {
+        const detalle: Array<DetalleProductoOutDTO> = await this.entityManager.query(`
+            SELECT 
+                pro.nombre AS "nombreProducto", pro.stock AS "stock",
+                pro.precio_compra AS "precioCompra", pro.precio_venta AS "precioVenta",
+                cpro.nombre AS "categoria"
+            FROM producto pro
+            INNER JOIN categoria_producto cpro ON pro.id_categoria_producto = cpro.id_categoria_producto
+            WHERE pro.nombre LIKE :nombre
+        `, [`%${nombre}%`]);
+        console.log(detalle);
+        if (detalle.length < 1) {
+            throw new HttpException({ mensaje: `El producto con nombre parcial ${nombre} no existe`, status: HttpStatus.BAD_REQUEST }, HttpStatus.BAD_REQUEST);
+        }
+        return detalle;
+    }
+
 }

@@ -16,8 +16,14 @@ export interface ProductoService {
     update(producto: ProductoEntity): Promise<ProductoEntity>;
 
     /**
-     * Método para retornar el detalle de un producto.
+     * Método para retornar el detalle de un producto por el identificador (PK).
      * @param {number} idProducto 
      */
     findDetalleProductoById(idProducto: number): Promise<DetalleProductoOutDTO>;
+
+    /**
+     * Método encargado de retornar la lista de procutos que coincidan con el nombre del producto.
+     * @param {string} nombre nombre parcial del producto.
+     */
+    findDetalleProductoLikeNombre(nombre: string): Promise<Array<DetalleProductoOutDTO>>;
 }

@@ -22,4 +22,9 @@ export class ProductoController {
     async findDetalleProductoById(@Param('id', ParseIntPipe) idProducto: number): Promise<DetalleProductoOutDTO> {
         return this.productoService.findDetalleProductoById(idProducto);
     }
+
+    @Get("detalle/find-like/:nombre")
+    async findLikeNombre(@Param('nombre') nombre: string): Promise<Array<DetalleProductoOutDTO>> {
+        return this.productoService.findDetalleProductoLikeNombre(nombre);
+    }
 }
