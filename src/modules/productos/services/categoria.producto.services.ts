@@ -19,4 +19,15 @@ export interface CategoriaProductoService {
      * @param {number} idCategoriaProducto 
      */
     findByPk(idCategoriaProducto: number): Promise<CategoriaProductoEntity>;
+
+    /**
+     * Retorna todas las categorias de los productos.
+     */
+    findAll(): Promise<Array<CategoriaProductoEntity>>;
+
+    /**
+     * Método para buscar una lista de elementos por su nombre.
+     * @param nombre parte del nombre a buscar en la tabla categoria_producto
+     */
+    findLikeNombre(nombre: string): Promise<Array<CategoriaProductoEntity>>;
 }

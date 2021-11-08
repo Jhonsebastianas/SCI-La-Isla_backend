@@ -3,7 +3,6 @@ import { Repository } from "typeorm";
 import { CategoriaProductoEntity } from "@productos/models/entity/categoria.producto.entity";
 import { CategoriaProductoService } from "@productos/services/categoria.producto.services";
 
-
 export class CategoriaProductoServiceImpl implements CategoriaProductoService {
 
     constructor(@InjectRepository(CategoriaProductoEntity)
@@ -22,6 +21,17 @@ export class CategoriaProductoServiceImpl implements CategoriaProductoService {
             .where(
                 "idCategoriaProducto = :id", { "id": idCategoriaProducto }
             ).getOne();
+    }
+
+    async findAll(): Promise<CategoriaProductoEntity[]> {
+        return await this.categoriaProductoRepository.find();
+    }
+
+    async findLikeNombre(nombre: string): Promise<CategoriaProductoEntity[]> {
+        return await this.categoriaProductoRepository
+            .createQueryBuilder("categoria")
+            .where("categoria.nombre LIKE :nombre", { nombre: `%${nombre}%` })
+            .getMany();
     }
 
 }
