@@ -1,5 +1,5 @@
 // DTO encargado de los pagos por cliente.
-export class PagoCliente {
+export class PagoClienteDTO {
     idFormaPago: number;
     numeroComprobante: string;
     valor: number;

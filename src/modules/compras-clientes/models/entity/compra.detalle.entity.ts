@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity("COMPRA_DETALLE")
-export class CompraDetalle {
+export class CompraDetalleEntity {
 
     @PrimaryGeneratedColumn()
     @PrimaryColumn({ name: "ID_COMPRA_DETALLE" })
@@ -12,6 +12,9 @@ export class CompraDetalle {
 
     @Column({ name: "ID_PRODUCTO" })
     idProducto: number;
+
+    @Column({ name: "VALOR_TOTAL" })
+    valorTotal: number;
 
     @Column({ name: "CANTIDAD" })
     cantidad: number;

@@ -7,8 +7,10 @@ import { ProductoEntity } from './modules/productos/models/entity/producto.entit
 import { CategoriaProductoEntity } from './modules/productos/models/entity/categoria.producto.entity';
 
 // Module compras cliente
-import { FormaPagoEntity } from '@compras.clientes/models/entity/forma.pago.entity';
 import { CompraClienteModule } from '@compras.clientes/compra.cliente.module';
+import { FormaPagoEntity } from '@compras.clientes/models/entity/forma.pago.entity';
+import { CompraPagoEntity } from '@compras.clientes/models/entity/compra.pago.entity';
+import { CompraDetalleEntity } from '@compras.clientes/models/entity/compra.detalle.entity';
 
 @Module({
   imports: [
@@ -19,14 +21,14 @@ import { CompraClienteModule } from '@compras.clientes/compra.cliente.module';
         entities: [ // Se definen las entidades va administrar (y las cuales creara como tablas al momento de inicar la app)
           ProductoEntity, CategoriaProductoEntity,
           // Compras cliente
-          FormaPagoEntity,
+          FormaPagoEntity, CompraPagoEntity, CompraDetalleEntity
         ],
         synchronize: true
       }),
     TypeOrmModule.forFeature([
       ProductoEntity, CategoriaProductoEntity,
       // Compras cliente
-      FormaPagoEntity
+      FormaPagoEntity, CompraPagoEntity, CompraDetalleEntity
     ]),
     //Administración de entidades debería hacerce solo en cada modulo encargado de la entidad
     ProductoModule,
