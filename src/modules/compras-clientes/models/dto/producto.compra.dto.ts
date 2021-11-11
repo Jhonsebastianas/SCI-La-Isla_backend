@@ -3,6 +3,6 @@
  */
 export class ProductoCompraDTO {
     idProducto: number;
-    precioVenta: number;
+    valorTotal: number;
     cantidad: number;
 }

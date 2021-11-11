@@ -3,7 +3,7 @@ import { CompraDetalleService } from '@compras.clientes/services/compra.detalle.
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-class CompraDetalleServiceImpl implements CompraDetalleService {
+export class CompraDetalleServiceImpl implements CompraDetalleService {
 
     constructor(@InjectRepository(CompraDetalleEntity)
     private repository: Repository<CompraDetalleEntity>) { }

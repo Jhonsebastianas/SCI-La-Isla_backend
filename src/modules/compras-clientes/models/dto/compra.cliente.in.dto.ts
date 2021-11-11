@@ -5,5 +5,5 @@ import { ProductoCompraDTO } from "./producto.compra.dto";
 export class CompraClienteInDTO {
     productos: Array<ProductoCompraDTO>;
     pagos: Array<PagoClienteDTO>;
-    cliente: Array<ClienteIdentificacionDTO>;
+    cliente: ClienteIdentificacionDTO;
 }
