@@ -1,3 +1,4 @@
+import { MagicNumber } from "@commons/util/constantes";
 import { CompraClienteInDTO } from "@compras.clientes/models/dto/compra.cliente.in.dto";
 import { CompraDetalleEntity } from "@compras.clientes/models/entity/compra.detalle.entity";
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
@@ -18,6 +19,7 @@ export class CompraController {
     async registrarCompraCliente(@Body() compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
         const compraEntity = new CompraEntity();
         compraEntity.fechaCompra = new Date();
+        compraEntity.idCliente = MagicNumber.UNO;
         compraEntity.valorTotal = compraCliente.productos
             .map(producto => producto.valorTotal)
             .reduce((total, valor) => total + valor, 0);
