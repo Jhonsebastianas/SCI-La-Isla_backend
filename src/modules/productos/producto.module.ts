@@ -7,13 +7,13 @@ import { ProductoServiceImpl } from "./services/impl/producto.services.impl";
 import { ProductoController } from "./controllers/producto.controller";
 
 // Categoria producto
-import { CategoriaProductoEntity } from "./models/entity/categoria.producto.entity";
+import { TipoCategoriaProductoEntity } from "./models/entity/tipo.categoria.producto.entity";
 import { CategoriaProductoServiceImpl } from "./services/impl/categoria.producto.services.impl";
-import { CategoriaProductoController } from "./controllers/categoria.producto.controller";
+import { CategoriaProductoController } from "./controllers/tipo.categoria.producto.controller";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ProductoEntity, CategoriaProductoEntity]),
+        TypeOrmModule.forFeature([ProductoEntity, TipoCategoriaProductoEntity]),
     ],
     providers: [ProductoServiceImpl, CategoriaProductoServiceImpl],
     controllers: [ProductoController, CategoriaProductoController],

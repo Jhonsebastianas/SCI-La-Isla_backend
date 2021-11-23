@@ -1,11 +1,11 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity("FORMA_PAGO")
-export class FormaPagoEntity {
+@Entity("TIPO_FORMA_PAGO")
+export class TipoFormaPagoEntity {
 
     @PrimaryGeneratedColumn()
-    @PrimaryColumn({ name: "ID_FORMA_PAGO" })
-    idFormaPago: number;
+    @PrimaryColumn({ name: "ID_TIPO_FORMA_PAGO" })
+    idTipoFormaPago: number;
 
     @Column({ name: "NOMBRE" })
     nombre: string;
