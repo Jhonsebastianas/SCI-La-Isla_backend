@@ -19,7 +19,7 @@ export class CompraController {
     async registrarCompraCliente(@Body() compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
         const compraEntity = new CompraEntity();
         compraEntity.fechaCompra = new Date();
-        compraEntity.idCliente = MagicNumber.UNO;
+        compraEntity.idEmpleado = MagicNumber.UNO
         compraEntity.valorTotal = compraCliente.productos
             .map(producto => producto.valorTotal)
             .reduce((total, valor) => total + valor, 0);
