@@ -22,4 +22,7 @@ export class ProductoEntity {
     @Column({ name: "PRECIO_VENTA" })
     precioVenta: number;
 
+    @Column({ name: "ACTIVO" })
+    activo: boolean;
+
 }
