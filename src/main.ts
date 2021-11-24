@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright jhonsebastianas.com . All Rights Reserved.
+ */
+
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
