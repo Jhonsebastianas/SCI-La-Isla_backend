@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { TipoCategoriaProductoEntity } from '@productos/models/entity/tipo.categoria.producto.entity';
 import { CategoriaProductoServiceImpl } from '@productos/services/impl/categoria.producto.services.impl';
 
 @Controller("categoria-producto")
+@ApiTags('Tipo categoria producto')
 export class CategoriaProductoController {
     constructor(private categoriaProductoService: CategoriaProductoServiceImpl) { }
 

@@ -30,9 +30,9 @@ export class ProductoServiceImpl implements ProductoService {
             SELECT 
                 pro.nombre AS "nombreProducto", pro.stock AS "stock",
                 pro.precio_compra AS "precioCompra", pro.precio_venta AS "precioVenta",
-                cpro.nombre AS "categoria"
+                tcp.nombre AS "categoria"
             FROM producto pro
-            INNER JOIN categoria_producto cpro ON pro.id_categoria_producto = cpro.id_categoria_producto
+            INNER JOIN tipo_categoria_producto tcp ON pro.id_tipo_categoria_producto = tcp.id_tipo_categoria_producto
             WHERE pro.id_producto = :idProducto
         `, [idProducto]).then((detalles => detalles[MagicNumber.CERO]));
         if (!detalle) {
@@ -48,10 +48,9 @@ export class ProductoServiceImpl implements ProductoService {
                 pro.precio_compra AS "precioCompra", pro.precio_venta AS "precioVenta",
                 cpro.nombre AS "categoria"
             FROM producto pro
-            INNER JOIN categoria_producto cpro ON pro.id_categoria_producto = cpro.id_categoria_producto
+            INNER JOIN tipo_categoria_producto cpro ON pro.id_tipo_categoria_producto = cpro.id_tipo_categoria_producto
             WHERE pro.nombre LIKE :nombre
         `, [`%${nombre}%`]);
-        console.log(detalle);
         if (detalle.length < 1) {
             throw new HttpException({ mensaje: `El producto con nombre parcial ${nombre} no existe`, status: HttpStatus.BAD_REQUEST }, HttpStatus.BAD_REQUEST);
         }

@@ -7,8 +7,10 @@ import { CompraDetalleService } from "@compras.clientes/services/compra.detalle.
 import { CompraPagoService } from "@compras.clientes/services/compra.pago.service";
 import { CompraServiceImpl } from "@compras.clientes/services/impl/compra.service";
 import { Body, Controller } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("compra")
+@ApiTags('compras')
 export class CompraController {
     constructor(
         private compraService: CompraServiceImpl,

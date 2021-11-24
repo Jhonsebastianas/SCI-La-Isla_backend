@@ -7,7 +7,7 @@ export class ProductoEntity {
     @PrimaryColumn({ name: "ID_PRODUCTO" })
     idProducto: number;
 
-    @Column({ name: "ID_CATEGORIA_PRODUCTO" })
+    @Column({ name: "ID_TIPO_CATEGORIA_PRODUCTO" })
     idCategoriaProducto: number;
 
     @Column({ name: "NOMBRE" })
