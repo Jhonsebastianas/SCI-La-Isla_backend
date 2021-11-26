@@ -10,4 +10,7 @@ export class TipoCategoriaProductoEntity {
     @Column({ name: "NOMBRE" })
     nombre: string;
 
+    @Column({ name: "ACTIVO" })
+    activo: string;
+
 }
