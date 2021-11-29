@@ -7,7 +7,7 @@ export class ClienteEntity {
     idCliente: number;
 
     @Column({ name: "ID_TIPO_IDENTIFICACION" })
-    idTipoIdentificacion: string;
+    idTipoIdentificacion: number;
 
     @Column({ name: "NUMERO_IDENTIFICACION" })
     numeroIdentificacion: string;

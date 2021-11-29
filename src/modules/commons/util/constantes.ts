@@ -8,3 +8,7 @@ export enum Activo {
     SI = 'S',
     NO = 'N',
 }
+
+export enum Datos {
+    NO_REGISTRA = 'NN',
+}
