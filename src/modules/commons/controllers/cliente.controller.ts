@@ -1,7 +1,8 @@
 import { ClienteInDTO } from "@commons/models/dto/cliente.in.dto";
 import { ResponseDTO } from "@commons/models/dto/response.dto";
+import { ClienteEntity } from "@commons/models/entity/cliente.entity";
 import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
-import { Body, Controller, Get, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @Controller("cliente")
@@ -18,10 +19,11 @@ export class ClienteController {
         return await this.clienteService.registrarCliente(cliente);
     }
 
-    @Get("findByIdentificacion")
+    @Get("findByIdentificacion/:tipoIdentificacion/:numeroIdentificacion")
     @ApiOperation({ description: 'Método encargado de retornar un cliente consultado, por medio de su identificación' })
     @UsePipes(new ValidationPipe({ transform: true }))
-    async findByIdentificacion() {
-
+    async findByIdentificacion(@Param('tipoIdentificacion') tipoIdentificacion: number,
+        @Param('numeroIdentificacion') numeroIdentificacion: string): Promise<ClienteEntity> {
+        return await this.clienteService.findByIdentificacion(tipoIdentificacion, numeroIdentificacion);
     }
 }

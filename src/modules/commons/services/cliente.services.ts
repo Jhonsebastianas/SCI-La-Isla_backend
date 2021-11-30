@@ -15,4 +15,11 @@ export interface ClienteService {
      * @param {ClienteInDTO} cliente 
      */
     registrarCliente(cliente: ClienteInDTO): Promise<ResponseDTO>;
+
+    /**
+     * Método encargado de consultar un cliente por su identificación.
+     * @param {number} tipoIdentificacion id_tipo_identificación de la identificación del usuario.
+     * @param {string} numeroIdentificacion identificación del usuario.
+     */
+    findByIdentificacion(tipoIdentificacion: number, numeroIdentificacion: string): Promise<ClienteEntity>;
 }

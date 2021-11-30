@@ -21,7 +21,13 @@ import { CompraDetalleEntity } from '@compras.clientes/models/entity/compra.deta
     TypeOrmModule.forRoot(
       {
         // type: "sqlite", //https://github.com/nestjs/typeorm/issues/66
-
+        type: 'oracle',
+        host: 'localhost',
+        port: 1521,
+        username: 'LAISLA',
+        password: '1OuFL@uuuwiI',
+        database: 'db_laisla',
+        sid: 'xe',
         // database: ":memory:", //Indica que es una base de datos en memoria y se reinicia en cada ejecución
         entities: [ // Se definen las entidades va administrar (y las cuales creara como tablas al momento de inicar la app)
           // Common
