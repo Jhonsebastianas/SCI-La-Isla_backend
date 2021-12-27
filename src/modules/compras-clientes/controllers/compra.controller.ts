@@ -3,29 +3,31 @@ import { CompraClienteInDTO } from "@compras.clientes/models/dto/compra.cliente.
 import { CompraDetalleEntity } from "@compras.clientes/models/entity/compra.detalle.entity";
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 import { CompraPagoEntity } from "@compras.clientes/models/entity/compra.pago.entity";
-import { CompraDetalleService } from "@compras.clientes/services/compra.detalle.service";
-import { CompraPagoService } from "@compras.clientes/services/compra.pago.service";
+import { CompraDetalleServiceImpl } from "@compras.clientes/services/impl/compra.detalle.service.impl";
+import { CompraPagoServiceImpl } from "@compras.clientes/services/impl/compra.pago.service.impl";
 import { CompraServiceImpl } from "@compras.clientes/services/impl/compra.service";
-import { Body, Controller } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 
 @Controller("compra")
-@ApiTags('compras')
+@ApiTags('Compras')
 export class CompraController {
     constructor(
         private compraService: CompraServiceImpl,
-        private compraDetalleService: CompraDetalleService,
-        private compraPagoService: CompraPagoService,
+        private compraDetalleService: CompraDetalleServiceImpl,
+        private compraPagoService: CompraPagoServiceImpl,
     ) { }
 
+    @Post("registrar")
     async registrarCompraCliente(@Body() compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
-        const compraEntity = new CompraEntity();
+        let compraEntity = new CompraEntity();
         compraEntity.fechaCompra = new Date();
-        compraEntity.idEmpleado = MagicNumber.UNO
+        compraEntity.idEmpleado = MagicNumber.UNO;
+        compraEntity.idCliente = MagicNumber.UNO;
         compraEntity.valorTotal = compraCliente.productos
             .map(producto => producto.valorTotal)
             .reduce((total, valor) => total + valor, 0);
-        await this.compraService.insert(compraEntity);
+        compraEntity = await this.compraService.insert(compraEntity);
 
         compraCliente.productos.forEach(async producto => {
             const compraDetalleEntity = new CompraDetalleEntity();
@@ -39,7 +41,7 @@ export class CompraController {
         compraCliente.pagos.forEach(async pago => {
             const compraPago = new CompraPagoEntity();
             compraPago.idCompra = compraEntity.idCompra;
-            compraPago.idFormaPago = pago.idFormaPago;
+            compraPago.idTipoFormaPago = pago.idTipoFormaPago;
             compraPago.numeroComprobante = pago.numeroComprobante;
             compraPago.valor = pago.valor;
             await this.compraPagoService.insert(compraPago);

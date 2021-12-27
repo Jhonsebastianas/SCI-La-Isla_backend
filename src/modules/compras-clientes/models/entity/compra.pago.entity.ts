@@ -9,8 +9,8 @@ export class CompraPagoEntity {
     @Column({ name: "ID_COMPRA" })
     idCompra: number;
 
-    @Column({ name: "ID_FORMA_PAGO" })
-    idFormaPago: number;
+    @Column({ name: "ID_TIPO_FORMA_PAGO" })
+    idTipoFormaPago: number;
 
     @Column({ name: "NUMERO_COMPROBANTE" })
     numeroComprobante: string;

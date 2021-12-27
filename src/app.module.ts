@@ -15,6 +15,7 @@ import { CompraClienteModule } from '@compras.clientes/compra.cliente.module';
 import { TipoFormaPagoEntity } from '@compras.clientes/models/entity/tipo.forma.pago.entity';
 import { CompraPagoEntity } from '@compras.clientes/models/entity/compra.pago.entity';
 import { CompraDetalleEntity } from '@compras.clientes/models/entity/compra.detalle.entity';
+import { CompraEntity } from '@compras.clientes/models/entity/compra.entity';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { CompraDetalleEntity } from '@compras.clientes/models/entity/compra.deta
           // Productos
           ProductoEntity, TipoCategoriaProductoEntity,
           // Compras cliente
-          TipoFormaPagoEntity, CompraPagoEntity, CompraDetalleEntity
+          TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity
         ],
         synchronize: false
       }),
@@ -45,7 +46,7 @@ import { CompraDetalleEntity } from '@compras.clientes/models/entity/compra.deta
       // Productos
       ProductoEntity, TipoCategoriaProductoEntity,
       // Compras cliente
-      TipoFormaPagoEntity, CompraPagoEntity, CompraDetalleEntity
+      TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity
     ]),
     //Administración de entidades debería hacerce solo en cada modulo encargado de la entidad
     CommonModule,

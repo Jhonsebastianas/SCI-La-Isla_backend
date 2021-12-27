@@ -27,6 +27,6 @@ export class ProductoController {
 
     @Get("detalle/find-like/:nombre")
     async findLikeNombre(@Param('nombre') nombre: string): Promise<Array<DetalleProductoOutDTO>> {
-        return this.productoService.findDetalleProductoLikeNombre(nombre);
+        return this.productoService.findDetalleProductoLikeNombre(nombre.toUpperCase());
     }
 }
