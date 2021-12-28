@@ -17,6 +17,9 @@ import { CompraPagoEntity } from '@compras.clientes/models/entity/compra.pago.en
 import { CompraDetalleEntity } from '@compras.clientes/models/entity/compra.detalle.entity';
 import { CompraEntity } from '@compras.clientes/models/entity/compra.entity';
 
+// Modulo reportes
+import { ReporteModule } from '@reportes/reporte.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(
@@ -52,6 +55,7 @@ import { CompraEntity } from '@compras.clientes/models/entity/compra.entity';
     CommonModule,
     ProductoModule,
     CompraClienteModule,
+    ReporteModule,
   ],
   controllers: [],
   providers: [],

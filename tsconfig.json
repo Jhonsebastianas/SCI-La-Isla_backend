@@ -13,7 +13,8 @@
     "paths": {
       "@productos/*": ["src/modules/productos/*"],
       "@compras.clientes/*": ["src/modules/compras-clientes/*"],
-      "@commons/*": ["src/modules/commons/*"]
+      "@commons/*": ["src/modules/commons/*"],
+      "@reportes/*": ["src/modules/reportes/*"]
     },
     "incremental": true,
     "skipLibCheck": true
