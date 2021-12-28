@@ -11,7 +11,7 @@ export class ManagerExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse();
         response.json({ code: exception.getCode(), message: exception.getMessage() });
         console.error(// tslint:disable-line
-            'BusinessException code:%s message:%s \n%s',
+            `BusinessException code: %s message:%s \n%s `,
             exception.getCode(),
             exception.getMessage(),
             exception.getDetail());

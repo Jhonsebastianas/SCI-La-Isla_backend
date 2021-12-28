@@ -4,6 +4,7 @@ import { ClienteEntity } from "@commons/models/entity/cliente.entity";
 import { Activo, Datos } from "@commons/util/constantes";
 import { HttpStatus } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
+import { ParamException } from "src/config/exceptions/maganer.exception";
 import { EntityManager } from "typeorm";
 import { ClienteService } from "../cliente.services";
 
@@ -42,6 +43,9 @@ export class ClienteServiceImpl implements ClienteService {
                 AND cliente.NUMERO_IDENTIFICACION = :numeroIdentificacion
                 `, { tipoIdentificacion, numeroIdentificacion })
             .getOne();
+        if(!cliente) {
+            throw new ParamException('La identificación ingresada no esta asociada a ningún usuario registrado');
+        }
         return cliente;
     }
 

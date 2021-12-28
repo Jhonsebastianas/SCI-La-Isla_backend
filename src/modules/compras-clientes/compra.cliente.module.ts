@@ -1,6 +1,9 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+// Clientes
+import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
+
 // Compra
 import { CompraEntity } from "./models/entity/compra.entity";
 import { CompraServiceImpl } from "./services/impl/compra.service";
@@ -20,7 +23,12 @@ import { CompraDetalleServiceImpl } from "./services/impl/compra.detalle.service
     imports: [
         TypeOrmModule.forFeature([TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity]),
     ],
-    providers: [FormaPagoServiceImpl, CompraDetalleServiceImpl, CompraPagoServiceImpl, CompraServiceImpl],
+    providers: [
+        // Cliente
+        ClienteServiceImpl,
+        // Compras
+        FormaPagoServiceImpl, CompraDetalleServiceImpl, CompraPagoServiceImpl, CompraServiceImpl
+    ],
     controllers: [FormaPagoController, CompraController],
     exports: [TypeOrmModule],
 })
