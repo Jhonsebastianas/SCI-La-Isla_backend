@@ -11,6 +11,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "@config/*": ["src/config/*"],
       "@productos/*": ["src/modules/productos/*"],
       "@compras.clientes/*": ["src/modules/compras-clientes/*"],
       "@commons/*": ["src/modules/commons/*"],

@@ -11,9 +11,15 @@ export class ManagerExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse();
         response.json({ code: exception.getCode(), message: exception.getMessage() });
         console.error(// tslint:disable-line
-            `BusinessException code: %s message:%s \n%s `,
+            `Business Exception, code: ${getRandomCode()}, status: %s, message: %s \n%s `,
             exception.getCode(),
             exception.getMessage(),
-            exception.getDetail());
+            exception.getDetail() || '');
     }
+}
+
+function getRandomCode() {
+    const min = 1;
+    const max = 9999;
+    return Math.floor(Math.random() * (max - min) + min);
 }

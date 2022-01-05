@@ -1,3 +1,5 @@
+import { HttpStatus } from "@nestjs/common";
+
 /**
  * Business exceptions
  */
@@ -22,11 +24,20 @@ export class ManagerException {
 }
 
 /**
+ * No result exception
+ */
+export class NoResultException extends ManagerException {
+    constructor(message: string = 'parameter error', detail?: string) {
+        super(HttpStatus.NO_CONTENT, message, detail);
+    }
+}
+
+/**
  * parametric anomaly
  */
 export class ParamException extends ManagerException {
     constructor(message: string = 'parameter error', detail?: string) {
-        super(400, message, detail);
+        super(HttpStatus.BAD_REQUEST, message, detail);
     }
 }
 
@@ -35,6 +46,6 @@ export class ParamException extends ManagerException {
  */
 export class AuthException extends ManagerException {
     constructor(message: string = 'no access', detail?: string) {
-        super(403, message, detail);
+        super(HttpStatus.FORBIDDEN, message, detail);
     }
 }

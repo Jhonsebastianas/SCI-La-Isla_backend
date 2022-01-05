@@ -1,4 +1,4 @@
-import { Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 import { ProductoMasVendidoDTO } from "@reportes/models/dto/producto.mas.vendido.dto";
@@ -14,7 +14,7 @@ export class ReporteProductoController {
 
     @Post("findMasVendidos")
     @ApiOperation({ description: 'Retorna los productos más vendidos' })
-    async findMasVendidos(filtros?: FiltroGeneralDTO): Promise<Array<ProductoMasVendidoDTO>> {
+    async findMasVendidos(@Body() filtros?: FiltroGeneralDTO): Promise<Array<ProductoMasVendidoDTO>> {
         filtros = filtros || new FiltroGeneralDTO();
         return this.reporteServices.findMasVendidos(filtros);
     }

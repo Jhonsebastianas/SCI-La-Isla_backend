@@ -1,10 +1,11 @@
+import { MagicNumber } from '@commons/util/constantes';
+import { NoResultException } from "@config/exceptions/maganer.exception";
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
-import { MagicNumber } from '@commons/util/constantes';
-import { EntityManager } from "typeorm";
 import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
 import { ProductoEntity } from "@productos/models/entity/producto.entity";
 import { ProductoService } from "@productos/services/producto.services";
+import { EntityManager } from "typeorm";
 
 /**
  * Servicio encargado de la lógica de negocio y capa de datos.
@@ -36,7 +37,7 @@ export class ProductoServiceImpl implements ProductoService {
             WHERE pro.id_producto = :idProducto
         `, [idProducto]).then((detalles => detalles[MagicNumber.CERO]));
         if (!detalle) {
-            throw new HttpException({ mensaje: `El producto con identificación ${idProducto} no existe`, status: HttpStatus.BAD_REQUEST }, HttpStatus.BAD_REQUEST);
+            throw new NoResultException(`El producto con identificación ${idProducto} no existe`);
         }
         return detalle;
     }
@@ -52,7 +53,7 @@ export class ProductoServiceImpl implements ProductoService {
             WHERE pro.nombre LIKE :nombre
         `, [`%${nombre}%`]);
         if (detalle.length < 1) {
-            throw new HttpException({ mensaje: `El producto con nombre parcial ${nombre} no existe`, status: HttpStatus.BAD_REQUEST }, HttpStatus.BAD_REQUEST);
+            throw new NoResultException(`El producto con nombre parcial ${nombre} no existe`);
         }
         return detalle;
     }
