@@ -4,7 +4,11 @@
 export class ProductoMasVendidoDTO {
     idProducto: number;
     idTipoCategoriaProducto: number;
-    cantidadCompras: number;
+    cantidadProductoVendido: number;
+    cantidadVentas: number;
+    gananciaPorProductoVendido: number;
+    gananciaTotal: number;
     nombre: string;
-    valorTotalCompras: number;
+    mayorFormaPago: string;
+    valorTotalVentas: number;
 }

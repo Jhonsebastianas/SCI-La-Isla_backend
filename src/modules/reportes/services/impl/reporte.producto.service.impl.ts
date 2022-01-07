@@ -1,4 +1,6 @@
+import { MagicNumber } from "@commons/util/constantes";
 import { Formats } from "@commons/util/dates.util";
+import { NoResultException } from "@config/exceptions/maganer.exception";
 import { InjectEntityManager } from "@nestjs/typeorm";
 import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 import { ProductoMasVendidoDTO } from "@reportes/models/dto/producto.mas.vendido.dto";
@@ -21,35 +23,62 @@ export class ReporteProductoServiceImpl implements ReporteProductoService {
                     tcp.id_tipo_categoria_producto AS idTipoCategoriaProducto,
                     tcp.nombre AS categoria,
                     pr.nombre AS nombre,
-                    COUNT(code.id_producto) AS cantidadCompras,
-                    SUM(code.valor_total) AS valorTotalCompras
+                    pr.precio_compra AS precioCompra,
+                    pr.precio_venta AS precioVenta,
+                    COUNT(code.id_producto) AS cantidadVentas,
+                    SUM(code.cantidad) AS cantidadProductoVendido,
+                    pr.precio_venta * SUM(code.cantidad) AS valorTotalVentas,
+                    pr.precio_venta * SUM(code.cantidad) - pr.precio_compra * SUM(code.cantidad) AS gananciaTotal,
+                    (pr.precio_venta - pr.precio_compra) AS gananciaPorProductoVendido
                 FROM producto pr
                 INNER JOIN compra_detalle code ON pr.id_producto = code.id_producto
                 INNER JOIN compra copra ON code.id_compra = copra.id_compra
                 INNER JOIN tipo_categoria_producto tcp ON pr.id_tipo_categoria_producto = tcp.id_tipo_categoria_producto
+                ?filtroIdProducto
                 ?filtroFecha
-                GROUP BY pr.id_producto, pr.nombre, tcp.nombre, tcp.id_tipo_categoria_producto
-                ORDER BY cantidadCompras DESC
+                GROUP BY pr.id_producto, pr.nombre, tcp.nombre, tcp.id_tipo_categoria_producto, pr.precio_compra, pr.precio_venta
+                ORDER BY cantidadVentas DESC
             )
             WHERE ROWNUM <= :cantidadProductosMostrar
         `;
-        sql = await this.applyGeneralFiltres(sql, params, filtros);
+        sql = await this.applyGeneralFiltres(sql, params, filtros)
         const productosMasVendidos = await this.entityManager.query(sql, params);
         return productosMasVendidos;
     }
 
+    async findEstadisticasProducto(filtros: FiltroGeneralDTO): Promise<ProductoMasVendidoDTO> {
+        const estadisticas = await this.findMasVendidos(filtros);
+        const estadisticaProducto = estadisticas[MagicNumber.CERO];
+        if (!estadisticaProducto) {
+            throw new NoResultException('No se encontraron estadísticas para el producto seleccionado.');
+        }
+        return estadisticaProducto;
+    }
 
     async applyGeneralFiltres(sql: string, params: any[], filtros?: FiltroGeneralDTO): Promise<string> {
+        let hasWhere = false;
+        if (filtros.idProducto) {
+            sql = sql.replace("?filtroIdProducto", `
+                WHERE pr.id_producto = :idProducto
+            `);
+            params.push(filtros.idProducto);
+            hasWhere = true;
+        }
+
         if (filtros.byFecha) {
             sql = sql.replace("?filtroFecha", `
-                WHERE copra.fecha_compra
+                ${hasWhere && 'AND' || 'WHERE'} copra.fecha_compra
                 BETWEEN (TO_DATE(:byFechaInicio, '${Formats.BD_DATE_FORMAT}') - 1) AND (TO_DATE(:byFechaFin, '${Formats.BD_DATE_FORMAT}') + 1)
             `);
             params.push(filtros.byFechaInicio);
             params.push(filtros.byFechaFin);
         }
+        // Eliminamos filtros no aplicados
+        sql = sql.replace("?filtroIdProducto", "");
         sql = sql.replace("?filtroFecha", "");
-        params.push(filtros.cantidadResultados);
+
+        // Cantidad de resultados
+        params.push(filtros.cantidadResultados || 1);
         return sql;
     }
 

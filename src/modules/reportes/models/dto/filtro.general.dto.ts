@@ -2,6 +2,9 @@ import { MagicNumber } from "@commons/util/constantes";
 
 export class FiltroGeneralDTO {
 
+    // identificadores
+    idProducto: number;
+
     // Cantidad a mostrar
     cantidadResultados: number = MagicNumber.TRES;
 

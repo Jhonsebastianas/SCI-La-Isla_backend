@@ -8,4 +8,11 @@ export interface ReporteProductoService {
      * @param {FiltroGeneralDTO} filtros (opcional), nos indica si la consulta requiere un filtro adicional.
      */
     findMasVendidos(filtros?: FiltroGeneralDTO): Promise<Array<ProductoMasVendidoDTO>>;
+
+    /**
+     * @
+     * Método encargado de retornar la información completa de un producto.
+     * @param {number} filtros nos indica si la consulta requiere un filtro adicional.
+     */
+    findEstadisticasProducto(filtros: FiltroGeneralDTO): Promise<ProductoMasVendidoDTO>;
 }
