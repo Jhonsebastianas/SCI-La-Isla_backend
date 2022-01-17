@@ -9,6 +9,18 @@ export interface CompraDetalleService {
     insert(compraDetalle: CompraDetalleEntity): Promise<CompraDetalleEntity>;
 
     /**
+     * Método encargado de actualizar el detalle de una compra.
+     * @param {CompraDetalleEntity} compraDetalle  detalle de una compra.
+     */
+    update(compraDetalle: CompraDetalleEntity): Promise<CompraDetalleEntity>;
+
+    /**
+     * Método encargado de eliminar el detalle de una compra.
+     * @param {number} idCompraDetalle identificación de la compra.
+     */
+    delete(idsCompraDetalle: number | Array<number>): Promise<void>;
+
+    /**
      * Método encargado de retornar un Compra_detalle por PK.
      * @param {number} idCompraDetalle identificador PK de la tabla.
      */

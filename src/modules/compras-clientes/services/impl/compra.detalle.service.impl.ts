@@ -12,6 +12,14 @@ export class CompraDetalleServiceImpl implements CompraDetalleService {
         return await this.repository.save(compraDetalle);
     }
 
+    async update(compraDetalle: CompraDetalleEntity): Promise<CompraDetalleEntity> {
+        return await this.repository.save(compraDetalle);
+    }
+
+    async delete(idsCompraDetalle: number | Array<number>): Promise<void> {
+        await this.repository.delete(idsCompraDetalle);
+    }
+
     async findByPk(idCompraDetalle: number): Promise<CompraDetalleEntity> {
         return await this.repository
             .createQueryBuilder("code")
@@ -22,7 +30,7 @@ export class CompraDetalleServiceImpl implements CompraDetalleService {
     async findByIdCompra(idCompra: number): Promise<CompraDetalleEntity[]> {
         return await this.repository
             .createQueryBuilder("code")
-            .where("code.id_compra = :idCompra", { idCompra })
+            .where("code.ID_COMPRA = :idCompra", { idCompra })
             .getMany();
     }
 

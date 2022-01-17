@@ -11,10 +11,14 @@ export class CompraServiceImpl implements CompraService {
         return await this.compraRepository.save(compra);
     }
 
+    async update(compra: CompraEntity): Promise<CompraEntity> {
+        return await this.compraRepository.save(compra);
+    }
+
     async findByPk(idCompra: number): Promise<CompraEntity> {
         return await this.compraRepository
             .createQueryBuilder("compra")
-            .where("compra.id_compra = :idCompra", { idCompra })
+            .where("compra.ID_COMPRA = :idCompra", { idCompra })
             .getOne();
     }
 

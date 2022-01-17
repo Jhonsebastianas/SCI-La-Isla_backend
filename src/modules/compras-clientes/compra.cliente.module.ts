@@ -3,7 +3,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 // Clientes
 import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
-
+// Producto
+import { ProductoServiceImpl } from "@productos/services/impl/producto.services.impl";
 // Compra
 import { CompraEntity } from "./models/entity/compra.entity";
 import { CompraServiceImpl } from "./services/impl/compra.service";
@@ -26,6 +27,8 @@ import { CompraDetalleServiceImpl } from "./services/impl/compra.detalle.service
     providers: [
         // Cliente
         ClienteServiceImpl,
+        // Producto
+        ProductoServiceImpl,
         // Compras
         FormaPagoServiceImpl, CompraDetalleServiceImpl, CompraPagoServiceImpl, CompraServiceImpl
     ],

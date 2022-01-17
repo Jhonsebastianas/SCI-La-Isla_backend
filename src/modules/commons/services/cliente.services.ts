@@ -22,4 +22,11 @@ export interface ClienteService {
      * @param {string} numeroIdentificacion identificación del usuario.
      */
     findByIdentificacion(tipoIdentificacion: number, numeroIdentificacion: string): Promise<ClienteEntity>;
+
+    /**
+     * Método encargado de recuperar un cliente por su PK.
+     * @createAt 2022/01/17 12:37 a.m.
+     * @param {number} idCliente identifiación del cliente
+     */
+    findByPk(idCliente: number): Promise<ClienteEntity>;
 }

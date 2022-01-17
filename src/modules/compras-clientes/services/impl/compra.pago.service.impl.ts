@@ -11,6 +11,10 @@ export class CompraPagoServiceImpl implements CompraPagoService {
         return await this.compraPagoRepository.save(compraPago);
     }
 
+    async delete(idsCompraPago: number | number[]): Promise<void> {
+        await this.compraPagoRepository.delete(idsCompraPago);
+    }
+
     async findByPk(idCompraPago: number): Promise<CompraPagoEntity> {
         return await this.compraPagoRepository
             .createQueryBuilder("copa")
@@ -21,7 +25,7 @@ export class CompraPagoServiceImpl implements CompraPagoService {
     async findByIdCompra(idCompra: number): Promise<CompraPagoEntity[]> {
         return await this.compraPagoRepository
             .createQueryBuilder("copa")
-            .where("copa.id_compra = :idCompra", { idCompra })
+            .where("copa.ID_COMPRA = :idCompra", { idCompra })
             .getMany();
     }
 

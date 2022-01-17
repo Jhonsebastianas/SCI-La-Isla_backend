@@ -4,7 +4,7 @@ import { ClienteEntity } from "@commons/models/entity/cliente.entity";
 import { Activo, Datos } from "@commons/util/constantes";
 import { HttpStatus } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
-import { ParamException } from "src/config/exceptions/maganer.exception";
+import { NoResultException, ParamException } from "src/config/exceptions/maganer.exception";
 import { EntityManager } from "typeorm";
 import { ClienteService } from "../cliente.services";
 
@@ -43,8 +43,20 @@ export class ClienteServiceImpl implements ClienteService {
                 AND cliente.NUMERO_IDENTIFICACION = :numeroIdentificacion
                 `, { tipoIdentificacion, numeroIdentificacion })
             .getOne();
-        if(!cliente) {
+        if (!cliente) {
             throw new ParamException('La identificación ingresada no esta asociada a ningún usuario registrado');
+        }
+        return cliente;
+    }
+
+    async findByPk(idCliente: number): Promise<ClienteEntity> {
+        const cliente = await this.entityManager.createQueryBuilder()
+            .select("cliente")
+            .from(ClienteEntity, "cliente")
+            .where(`cliente.ID_CLIENTE = :idCliente`, { idCliente })
+            .getOne();
+        if (!cliente) {
+            throw new NoResultException('El id ingresado no esta asociada a ningún usuario registrado');
         }
         return cliente;
     }

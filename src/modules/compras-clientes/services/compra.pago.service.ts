@@ -9,6 +9,13 @@ export interface CompraPagoService {
     insert(compraPago: CompraPagoEntity): Promise<CompraPagoEntity>;
 
     /**
+     * Método encargado de eliminar una o varias compra pago.
+     * @createAt 2022/01/16 09:30 p.m.
+     * @param {number | Array<number>} idsCompraPago 
+     */
+    delete(idsCompraPago: number | Array<number>): Promise<void>;
+
+    /**
      * Método encargado de retornar una compra_pago por medio de la PK.
      * @param idCompraPago identificador (PK) de la tabla compra_pago.
      */

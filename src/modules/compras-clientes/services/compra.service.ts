@@ -10,6 +10,12 @@ export interface CompraService {
     insert(compra: CompraEntity): Promise<CompraEntity>;
 
     /**
+     * Método para actualizar una compra.
+     * @param {CompraEntity} compra entidad compra.
+     */
+    update(compra: CompraEntity): Promise<CompraEntity>;
+
+    /**
      * Método para encontrar una compra por id.
      * @param {number} idCompra identificador PK, de la compra.
      */

@@ -49,3 +49,12 @@ export class AuthException extends ManagerException {
         super(HttpStatus.FORBIDDEN, message, detail);
     }
 }
+
+/**
+ * Permission exception
+ */
+ export class UnexpectedException  extends ManagerException {
+    constructor(message: string = 'internal error', detail?: string) {
+        super(HttpStatus.INTERNAL_SERVER_ERROR, message, detail);
+    }
+}

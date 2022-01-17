@@ -1,4 +1,5 @@
 export enum MagicNumber {
+    MENOS_UNO = -1,
     CERO = 0,
     UNO = 1,
     DOS = 2,
