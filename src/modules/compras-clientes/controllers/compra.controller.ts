@@ -4,6 +4,7 @@ import { ClienteEntity } from "@commons/models/entity/cliente.entity";
 import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
 import { MagicNumber } from "@commons/util/constantes";
 import { CompraClienteInDTO } from "@compras.clientes/models/dto/compra.cliente.in.dto";
+import { CompraClienteOutDTO } from "@compras.clientes/models/dto/compra.cliente.out.dto";
 import { PagoClienteDTO } from "@compras.clientes/models/dto/pago.cliente.dto";
 import { ProductoCompraDTO } from "@compras.clientes/models/dto/producto.compra.dto";
 import { ResumenComprasInDTO } from "@compras.clientes/models/dto/resumen.compras.in.dto";
@@ -150,8 +151,51 @@ export class CompraController {
     }
 
     @Post("resumen-compras")
-    async findResumenCompras(@Body() resumenComprasInDTO: ResumenComprasInDTO) {
-        
+    async findResumenCompras(@Body() resumenComprasInDTO: ResumenComprasInDTO): Promise<Array<CompraClienteOutDTO>> {
+        const listaCompras: Array<CompraEntity> = await this.compraService.findAll();
+        const listaCompraClienteInDTO: Array<CompraClienteOutDTO> = [];
+
+        for await (const compra of listaCompras) {
+            const compraClienteOutDTO: CompraClienteOutDTO = new CompraClienteOutDTO();
+            compraClienteOutDTO.compra = compra;
+            const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleService.findByIdCompra(compra.idCompra);
+            const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoService.findByIdCompra(compra.idCompra);
+            const cliente = await this.clienteService.findByPk(compra.idCliente);
+
+            // Mapeamos el dto
+            compraClienteOutDTO.productos = listaDetalles.map(compraDetalleEntityToProductoCompraDto);
+            compraClienteOutDTO.pagos = listaCompraPagos.map(compraPagoEntityToPagoClienteDto);
+
+            // Cliente
+            compraClienteOutDTO.cliente = new ClienteIdentificacionDTO();
+            compraClienteOutDTO.cliente.idTipoDocumento = cliente.idTipoIdentificacion;
+            compraClienteOutDTO.cliente.numeroDocumento = cliente.numeroIdentificacion;
+
+            // Empleado
+            compraClienteOutDTO.empleado = new IdentificacionDTO();
+            compraClienteOutDTO.empleado.idTipoDocumento = MagicNumber.UNO;
+            compraClienteOutDTO.empleado.numeroDocumento = cliente.numeroIdentificacion;
+
+            listaCompraClienteInDTO.push(compraClienteOutDTO);
+        }
+
+        function compraDetalleEntityToProductoCompraDto(detalle: CompraDetalleEntity) {
+            const productoCompraDto = new ProductoCompraDTO();
+            productoCompraDto.idProducto = detalle.idProducto;
+            productoCompraDto.cantidad = detalle.cantidad;
+            productoCompraDto.valorTotal = detalle.valorTotal;
+            return productoCompraDto;
+        }
+
+        function compraPagoEntityToPagoClienteDto(pago: CompraPagoEntity) {
+            const pagoClienteDto = new PagoClienteDTO();
+            pagoClienteDto.idTipoFormaPago = pago.idTipoFormaPago;
+            pagoClienteDto.numeroComprobante = pago.numeroComprobante;
+            pagoClienteDto.valor = pago.valor;
+            return pagoClienteDto;
+        }
+
+        return listaCompraClienteInDTO;
     }
 
 }

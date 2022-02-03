@@ -27,4 +27,15 @@ export class CompraServiceImpl implements CompraService {
         return compraEntity;
     }
 
+    async findAll(): Promise<CompraEntity[]> {
+        const listaCompras = await this.compraRepository
+            .createQueryBuilder("compra")
+            .orderBy('compra.idCompra', 'DESC')
+            .getMany();
+        if (!listaCompras) {
+            throw new NoResultException(`No se encontraron compras registradas`);
+        }
+        return listaCompras;
+    }
+
 }
