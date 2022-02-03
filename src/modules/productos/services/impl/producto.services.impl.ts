@@ -26,6 +26,23 @@ export class ProductoServiceImpl implements ProductoService {
         return await this.entityManager.save(producto);
     }
 
+    async findAll(): Promise<DetalleProductoOutDTO[]> {
+        const listaDetalles: Array<DetalleProductoOutDTO> = await this.entityManager.query(`
+            SELECT 
+                pro.id_producto AS "idProducto",
+                pro.nombre AS "nombreProducto", pro.stock AS "stock",
+                pro.precio_compra AS "precioCompra", pro.precio_venta AS "precioVenta",
+                tcp.nombre AS "categoria"
+            FROM producto pro
+            INNER JOIN tipo_categoria_producto tcp ON pro.id_tipo_categoria_producto = tcp.id_tipo_categoria_producto
+            ORDER BY pro.nombre ASC
+        `);
+        if (!listaDetalles) {
+            throw new NoResultException(`No se encontraron productos registrados`);
+        }
+        return listaDetalles;
+    }
+
     async findDetalleProductoById(idProducto: number): Promise<DetalleProductoOutDTO> {
         const detalle: DetalleProductoOutDTO = await this.entityManager.query(`
             SELECT 

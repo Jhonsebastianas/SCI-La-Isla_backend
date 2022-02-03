@@ -20,6 +20,12 @@ export class ProductoController {
         return this.productoService.update(producto);
     }
 
+    @Get("find-all")
+    @ApiOperation({ description: 'Retorna todos los productos registrados' })
+    async findAll(): Promise<Array<DetalleProductoOutDTO>> {
+        return this.productoService.findAll();
+    }
+
     @Get("detalle/:id")
     async findDetalleProductoById(@Param('id', ParseIntPipe) idProducto: number): Promise<DetalleProductoOutDTO> {
         return this.productoService.findDetalleProductoById(idProducto);

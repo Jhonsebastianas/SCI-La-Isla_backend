@@ -6,6 +6,7 @@ export class ProductoMasVendidoDTO {
     idTipoCategoriaProducto: number;
     cantidadProductoVendido: number;
     cantidadVentas: number;
+    categoria: String;
     gananciaPorProductoVendido: number;
     gananciaTotal: number;
     nombre: string;

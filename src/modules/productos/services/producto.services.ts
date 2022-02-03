@@ -16,6 +16,11 @@ export interface ProductoService {
     update(producto: ProductoEntity): Promise<ProductoEntity>;
 
     /**
+     * Método encargado de retornar toda la lista completa de productos.
+     */
+    findAll(): Promise<Array<DetalleProductoOutDTO>>;
+
+    /**
      * Método para retornar el detalle de un producto por el identificador (PK).
      * @param {number} idProducto 
      */

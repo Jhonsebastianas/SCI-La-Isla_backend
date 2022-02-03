@@ -15,7 +15,8 @@
       "@productos/*": ["src/modules/productos/*"],
       "@compras.clientes/*": ["src/modules/compras-clientes/*"],
       "@commons/*": ["src/modules/commons/*"],
-      "@reportes/*": ["src/modules/reportes/*"]
+      "@reportes/*": ["src/modules/reportes/*"],
+      "@utils/*": ["src/utils/*"]
     },
     "incremental": true,
     "skipLibCheck": true

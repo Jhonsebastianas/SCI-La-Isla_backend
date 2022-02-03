@@ -6,6 +6,7 @@ import { MagicNumber } from "@commons/util/constantes";
 import { CompraClienteInDTO } from "@compras.clientes/models/dto/compra.cliente.in.dto";
 import { PagoClienteDTO } from "@compras.clientes/models/dto/pago.cliente.dto";
 import { ProductoCompraDTO } from "@compras.clientes/models/dto/producto.compra.dto";
+import { ResumenComprasInDTO } from "@compras.clientes/models/dto/resumen.compras.in.dto";
 import { CompraDetalleEntity } from "@compras.clientes/models/entity/compra.detalle.entity";
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 import { CompraPagoEntity } from "@compras.clientes/models/entity/compra.pago.entity";
@@ -146,6 +147,11 @@ export class CompraController {
         }
 
         return compraClienteInDTO;
+    }
+
+    @Post("resumen-compras")
+    async findResumenCompras(@Body() resumenComprasInDTO: ResumenComprasInDTO) {
+        
     }
 
 }

@@ -2,6 +2,7 @@ import { CompraService } from "@compras.clientes/services/compra.service";
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { NoResultException } from "@config/exceptions/maganer.exception";
 
 export class CompraServiceImpl implements CompraService {
     constructor(@InjectRepository(CompraEntity)
@@ -16,10 +17,14 @@ export class CompraServiceImpl implements CompraService {
     }
 
     async findByPk(idCompra: number): Promise<CompraEntity> {
-        return await this.compraRepository
+        const compraEntity = await this.compraRepository
             .createQueryBuilder("compra")
             .where("compra.ID_COMPRA = :idCompra", { idCompra })
             .getOne();
+        if (!compraEntity) {
+            throw new NoResultException(`No se pudo encontrar la compra con id: ${idCompra}`);
+        }
+        return compraEntity;
     }
 
 }
