@@ -14,8 +14,9 @@ import { CompraPagoEntity } from "@compras.clientes/models/entity/compra.pago.en
 import { CompraDetalleServiceImpl } from "@compras.clientes/services/impl/compra.detalle.service.impl";
 import { CompraPagoServiceImpl } from "@compras.clientes/services/impl/compra.pago.service.impl";
 import { CompraServiceImpl } from "@compras.clientes/services/impl/compra.service";
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
+import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
 import { ProductoServiceImpl } from "@productos/services/impl/producto.services.impl";
 
 @Controller("compra-cliente")
@@ -63,6 +64,26 @@ export class CompraController {
         });
 
         return compraCliente;
+    }
+
+    @Delete("eliminar-compra/:idCompra")
+    async eliminarCompraByIdCompra(@Param('idCompra') idCompra: number): Promise<number> {
+        // Eliminamos el detalle
+        try {
+            let listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleService.findByIdCompra(idCompra);
+            await this.compraDetalleService.delete(listaDetalles.map(detalles => detalles.idCompraDetalle));
+        } catch (e) { }
+
+        // Buscamos las compra pagos y los eliminamos
+        try {
+            let listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoService.findByIdCompra(idCompra);
+            await this.compraPagoService.delete(listaCompraPagos.map(pago => pago.idCompraPago));
+        } catch (e) { }
+
+        // Por último eliminamos la compra.
+        await this.compraService.delete(idCompra);
+
+        return idCompra;
     }
 
     @Put("actualizar-compra/:idCompra")
@@ -120,7 +141,18 @@ export class CompraController {
 
         const compraClienteInDTO: CompraClienteInDTO = new CompraClienteInDTO();
         // Mapeamos el dto
-        compraClienteInDTO.productos = listaDetalles.map(compraDetalleEntityToProductoCompraDto);
+        compraClienteInDTO.productos = [];
+        for (const detalle of listaDetalles) {
+            const producto: DetalleProductoOutDTO = await this.productoService.findDetalleProductoById(detalle.idProducto);
+            const productoCompraDto = new ProductoCompraDTO();
+            productoCompraDto.idProducto = detalle.idProducto;
+            productoCompraDto.cantidad = detalle.cantidad;
+            productoCompraDto.categoria = producto.categoria;
+            productoCompraDto.nombreProducto = producto.nombreProducto;
+            productoCompraDto.precioVenta = producto.precioVenta;
+            productoCompraDto.valorTotal = detalle.valorTotal;
+            compraClienteInDTO.productos.push(productoCompraDto)
+        }
         compraClienteInDTO.pagos = listaCompraPagos.map(compraPagoEntityToPagoClienteDto);
         // Cliente
         compraClienteInDTO.cliente = new ClienteIdentificacionDTO();
@@ -130,14 +162,6 @@ export class CompraController {
         compraClienteInDTO.empleado = new IdentificacionDTO();
         compraClienteInDTO.empleado.idTipoDocumento = MagicNumber.UNO;
         compraClienteInDTO.empleado.numeroDocumento = cliente.numeroIdentificacion;
-
-        function compraDetalleEntityToProductoCompraDto(detalle: CompraDetalleEntity) {
-            const productoCompraDto = new ProductoCompraDTO();
-            productoCompraDto.idProducto = detalle.idProducto;
-            productoCompraDto.cantidad = detalle.cantidad;
-            productoCompraDto.valorTotal = detalle.valorTotal;
-            return productoCompraDto;
-        }
 
         function compraPagoEntityToPagoClienteDto(pago: CompraPagoEntity) {
             const pagoClienteDto = new PagoClienteDTO();
@@ -163,13 +187,22 @@ export class CompraController {
             const cliente = await this.clienteService.findByPk(compra.idCliente);
 
             // Mapeamos el dto
-            compraClienteOutDTO.productos = listaDetalles.map(compraDetalleEntityToProductoCompraDto);
+            compraClienteOutDTO.productos = [];
+            for (const detalle of listaDetalles) {
+                const producto: DetalleProductoOutDTO = await this.productoService.findDetalleProductoById(detalle.idProducto);
+                const productoCompraDto = new ProductoCompraDTO();
+                productoCompraDto.idProducto = detalle.idProducto;
+                productoCompraDto.cantidad = detalle.cantidad;
+                productoCompraDto.categoria = producto.categoria;
+                productoCompraDto.nombreProducto = producto.nombreProducto;
+                productoCompraDto.precioVenta = producto.precioVenta;
+                productoCompraDto.valorTotal = detalle.valorTotal;
+                compraClienteOutDTO.productos.push(productoCompraDto)
+            }
             compraClienteOutDTO.pagos = listaCompraPagos.map(compraPagoEntityToPagoClienteDto);
 
             // Cliente
-            compraClienteOutDTO.cliente = new ClienteIdentificacionDTO();
-            compraClienteOutDTO.cliente.idTipoDocumento = cliente.idTipoIdentificacion;
-            compraClienteOutDTO.cliente.numeroDocumento = cliente.numeroIdentificacion;
+            compraClienteOutDTO.cliente = cliente;
 
             // Empleado
             compraClienteOutDTO.empleado = new IdentificacionDTO();
@@ -177,14 +210,6 @@ export class CompraController {
             compraClienteOutDTO.empleado.numeroDocumento = cliente.numeroIdentificacion;
 
             listaCompraClienteInDTO.push(compraClienteOutDTO);
-        }
-
-        function compraDetalleEntityToProductoCompraDto(detalle: CompraDetalleEntity) {
-            const productoCompraDto = new ProductoCompraDTO();
-            productoCompraDto.idProducto = detalle.idProducto;
-            productoCompraDto.cantidad = detalle.cantidad;
-            productoCompraDto.valorTotal = detalle.valorTotal;
-            return productoCompraDto;
         }
 
         function compraPagoEntityToPagoClienteDto(pago: CompraPagoEntity) {

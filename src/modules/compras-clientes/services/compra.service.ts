@@ -19,6 +19,13 @@ export interface CompraService {
     update(compra: CompraEntity): Promise<CompraEntity>;
 
     /**
+     * Método encargado de eliminar una compra.
+     * @createAt 03/02/2022, 09:59 p.m.
+     * @param {number | Array<number>} idsCompra iidentificador PK, de la compra.
+     */
+    delete(idsCompra: number | Array<number>): Promise<void>;
+
+    /**
      * Método para encontrar una compra por id.
      * @param {number} idCompra identificador PK, de la compra.
      */

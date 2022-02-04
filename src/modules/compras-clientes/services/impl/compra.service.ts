@@ -16,6 +16,10 @@ export class CompraServiceImpl implements CompraService {
         return await this.compraRepository.save(compra);
     }
 
+    async delete(idsCompra: number | Array<number>): Promise<void> {
+        await this.compraRepository.delete(idsCompra);
+    }
+
     async findByPk(idCompra: number): Promise<CompraEntity> {
         const compraEntity = await this.compraRepository
             .createQueryBuilder("compra")
