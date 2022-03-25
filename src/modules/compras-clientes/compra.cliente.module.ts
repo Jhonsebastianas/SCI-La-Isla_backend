@@ -1,42 +1,53 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-// Clientes
-import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
-// Producto
-import { ProductoServiceImpl } from "@productos/services/impl/producto.services.impl";
 // Compra
 import { CompraEntity } from "./models/entity/compra.entity";
-import { CompraServiceImpl } from "./services/impl/compra.service";
-import { CompraController } from "./controllers/compra.controller";
+import { CompraClienteService } from "./services/compra.cliente.service";
 // Forma de pago
 import { TipoFormaPagoEntity } from "./models/entity/tipo.forma.pago.entity";
-import { FormaPagoServiceImpl } from "./services/impl/tipo.forma.pago.service.impl";
-import { FormaPagoController } from "./controllers/tipo.forma.pago.controller";
+import { FormaPagoService } from "./services/tipo.forma.pago.service";
 // Compra pago
 import { CompraPagoEntity } from "./models/entity/compra.pago.entity";
-import { CompraPagoServiceImpl } from "./services/impl/compra.pago.service.impl";
 // Compra detalle
 import { CompraDetalleEntity } from "./models/entity/compra.detalle.entity";
-import { CompraDetalleServiceImpl } from "./services/impl/compra.detalle.service.impl";
 import { TipoFormaPagoDaoImpl } from "./dao/impl/tipo.forma.pago.dao.impl";
 import { TipoFormaPagoManagerImpl } from "./manager/impl/tipo.forma.pago.manager.impl";
+import { CompraDetalleDaoimpl } from "./dao/impl/compra.detalle.dao.impl";
+import { CompraPagoDaoImpl } from "./dao/impl/compra.pago.dao.impl";
+import { CompraDaoImpl } from "./dao/impl/compra.dao.impl";
+import { CompraClienteManagerImpl } from "./manager/impl/compra.cliente.manager.impl";
+import { CommonModule } from "@commons/common.module";
+import { ProductoModule } from "@productos/producto.module";
 
 @Module({
     imports: [
+        CommonModule,
+        ProductoModule,
         TypeOrmModule.forFeature([TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity]),
     ],
     providers: [
-        // Cliente
-        ClienteServiceImpl,
-        // Producto
-        ProductoServiceImpl,
-        // Compras
-        FormaPagoServiceImpl, CompraDetalleServiceImpl, CompraPagoServiceImpl, CompraServiceImpl,
-        TipoFormaPagoDaoImpl, TipoFormaPagoManagerImpl
+        // Compras Dao
+        CompraDetalleDaoimpl,
+        CompraPagoDaoImpl,
+        CompraDaoImpl,
+        TipoFormaPagoDaoImpl,
+        // Compra Manager
+        CompraClienteManagerImpl,
+        TipoFormaPagoManagerImpl,
     ],
-    controllers: [FormaPagoController, CompraController],
-    exports: [TypeOrmModule, TipoFormaPagoDaoImpl, TipoFormaPagoManagerImpl],
+    controllers: [FormaPagoService, CompraClienteService],
+    exports: [
+        TypeOrmModule,
+        // Compras Dao
+        CompraDetalleDaoimpl,
+        CompraPagoDaoImpl,
+        CompraDaoImpl,
+        TipoFormaPagoDaoImpl,
+        // Compra Manager
+        CompraClienteManagerImpl,
+        TipoFormaPagoManagerImpl,
+    ],
 })
 
 export class CompraClienteModule { }

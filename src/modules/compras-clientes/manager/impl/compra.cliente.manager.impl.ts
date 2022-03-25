@@ -2,7 +2,9 @@ import { ClienteIdentificacionDTO } from "@commons/models/dto/cliente.identifica
 import { IdentificacionDTO } from "@commons/models/dto/identificacion.dto";
 import { ClienteEntity } from "@commons/models/entity/cliente.entity";
 import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
-import { MagicNumber } from "@commons/util/constantes";
+import { CompraDaoImpl } from "@compras.clientes/dao/impl/compra.dao.impl";
+import { CompraDetalleDaoimpl } from "@compras.clientes/dao/impl/compra.detalle.dao.impl";
+import { CompraPagoDaoImpl } from "@compras.clientes/dao/impl/compra.pago.dao.impl";
 import { CompraClienteInDTO } from "@compras.clientes/models/dto/compra.cliente.in.dto";
 import { CompraClienteOutDTO } from "@compras.clientes/models/dto/compra.cliente.out.dto";
 import { PagoClienteDTO } from "@compras.clientes/models/dto/pago.cliente.dto";
@@ -11,27 +13,23 @@ import { ResumenComprasInDTO } from "@compras.clientes/models/dto/resumen.compra
 import { CompraDetalleEntity } from "@compras.clientes/models/entity/compra.detalle.entity";
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 import { CompraPagoEntity } from "@compras.clientes/models/entity/compra.pago.entity";
-import { CompraDetalleServiceImpl } from "@compras.clientes/services/impl/compra.detalle.service.impl";
-import { CompraPagoServiceImpl } from "@compras.clientes/services/impl/compra.pago.service.impl";
-import { CompraServiceImpl } from "@compras.clientes/services/impl/compra.service";
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { Injectable } from "@nestjs/common";
 import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
 import { ProductoServiceImpl } from "@productos/services/impl/producto.services.impl";
+import { MagicNumber } from "@utils/constantes";
+import { CompraClienteManager } from "../compra.cliente.manager";
 
-@Controller("compra-cliente")
-@ApiTags('Compras Cliente')
-export class CompraController {
+@Injectable()
+export class CompraClienteManagerImpl implements CompraClienteManager {
     constructor(
-        private compraService: CompraServiceImpl,
-        private compraDetalleService: CompraDetalleServiceImpl,
-        private compraPagoService: CompraPagoServiceImpl,
+        private compraDao: CompraDaoImpl,
+        private compraDetalleDao: CompraDetalleDaoimpl,
+        private compraPagoDao: CompraPagoDaoImpl,
         private clienteService: ClienteServiceImpl,
         private productoService: ProductoServiceImpl,
     ) { }
 
-    @Post("registrar")
-    async registrarCompraCliente(@Body() compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
+    async registrarCompraCliente(compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
         // Consultamos al cliente
         const cliente = await this.clienteService.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
 
@@ -42,7 +40,7 @@ export class CompraController {
         compraEntity.valorTotal = compraCliente.productos
             .map(producto => producto.valorTotal)
             .reduce((total, valor) => total + valor, 0);
-        compraEntity = await this.compraService.insert(compraEntity);
+        compraEntity = await this.compraDao.insert(compraEntity);
 
         compraCliente.productos.forEach(async producto => {
             const compraDetalleEntity = new CompraDetalleEntity();
@@ -50,7 +48,7 @@ export class CompraController {
             compraDetalleEntity.cantidad = producto.cantidad;
             compraDetalleEntity.idProducto = producto.idProducto;
             compraDetalleEntity.valorTotal = producto.valorTotal;
-            await this.compraDetalleService.insert(compraDetalleEntity);
+            await this.compraDetalleDao.insert(compraDetalleEntity);
             await this.productoService.updateStockProductoVendido(producto.idProducto, producto.cantidad);
         });
 
@@ -60,50 +58,48 @@ export class CompraController {
             compraPago.idTipoFormaPago = pago.idTipoFormaPago;
             compraPago.numeroComprobante = pago.numeroComprobante;
             compraPago.valor = pago.valor;
-            await this.compraPagoService.insert(compraPago);
+            await this.compraPagoDao.insert(compraPago);
         });
 
         return compraCliente;
     }
 
-    @Delete("eliminar-compra/:idCompra")
-    async eliminarCompraByIdCompra(@Param('idCompra') idCompra: number): Promise<number> {
+    async eliminarCompraByIdCompra(idCompra: number): Promise<number> {
         // Eliminamos el detalle
         try {
-            let listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleService.findByIdCompra(idCompra);
-            await this.compraDetalleService.delete(listaDetalles.map(detalles => detalles.idCompraDetalle));
+            let listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(idCompra);
+            await this.compraDetalleDao.delete(listaDetalles.map(detalles => detalles.idCompraDetalle));
         } catch (e) { }
 
         // Buscamos las compra pagos y los eliminamos
         try {
-            let listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoService.findByIdCompra(idCompra);
-            await this.compraPagoService.delete(listaCompraPagos.map(pago => pago.idCompraPago));
+            let listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoDao.findByIdCompra(idCompra);
+            await this.compraPagoDao.delete(listaCompraPagos.map(pago => pago.idCompraPago));
         } catch (e) { }
 
         // Por último eliminamos la compra.
-        await this.compraService.delete(idCompra);
+        await this.compraDao.delete(idCompra);
 
         return idCompra;
     }
 
-    @Put("actualizar-compra/:idCompra")
-    async actualizarCompraCliente(@Param('idCompra') idCompra: number, @Body() compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
+    async actualizarCompraCliente(idCompra: number, compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
         const cliente: ClienteEntity = await this.clienteService.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
-        let compraEntity: CompraEntity = await this.compraService.findByPk(idCompra);
+        let compraEntity: CompraEntity = await this.compraDao.findByPk(idCompra);
         compraEntity.idCliente = cliente.idCliente;
         compraEntity.valorTotal = compraCliente.productos
             .map(producto => producto.valorTotal)
             .reduce((total, valor) => total + valor, 0);
-        compraEntity = await this.compraService.update(compraEntity);
+        compraEntity = await this.compraDao.update(compraEntity);
 
         // Buscamos los detalles anteriores.
-        let listaDetallesAnteriores: Array<CompraDetalleEntity> = await this.compraDetalleService.findByIdCompra(compraEntity.idCompra);
+        let listaDetallesAnteriores: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(compraEntity.idCompra);
         // Actualizamos los stocks con los nuevos datos.
         listaDetallesAnteriores.forEach(async detalle => {
             await this.productoService.updateStockProductoDevuelto(detalle.idProducto, detalle.cantidad);
         });
         // Eliminamos la lista de detalles anteriores.
-        await this.compraDetalleService.delete(listaDetallesAnteriores.map(detalles => detalles.idCompraDetalle));
+        await this.compraDetalleDao.delete(listaDetallesAnteriores.map(detalles => detalles.idCompraDetalle));
 
         // Registramos los nuevos detalles para la compra.
         compraCliente.productos.forEach(async producto => {
@@ -112,13 +108,13 @@ export class CompraController {
             compraDetalleEntity.cantidad = producto.cantidad;
             compraDetalleEntity.idProducto = producto.idProducto;
             compraDetalleEntity.valorTotal = producto.valorTotal;
-            await this.compraDetalleService.insert(compraDetalleEntity);
+            await this.compraDetalleDao.insert(compraDetalleEntity);
             await this.productoService.updateStockProductoVendido(producto.idProducto, producto.cantidad);
         });
 
         // Buscamos las compra pagos y los eliminamos
-        let listaCompraPagosAnteriores: Array<CompraPagoEntity> = await this.compraPagoService.findByIdCompra(compraEntity.idCompra);
-        await this.compraPagoService.delete(listaCompraPagosAnteriores.map(pago => pago.idCompraPago));
+        let listaCompraPagosAnteriores: Array<CompraPagoEntity> = await this.compraPagoDao.findByIdCompra(compraEntity.idCompra);
+        await this.compraPagoDao.delete(listaCompraPagosAnteriores.map(pago => pago.idCompraPago));
 
         compraCliente.pagos.forEach(async pago => {
             const compraPago = new CompraPagoEntity();
@@ -126,17 +122,16 @@ export class CompraController {
             compraPago.idTipoFormaPago = pago.idTipoFormaPago;
             compraPago.numeroComprobante = pago.numeroComprobante;
             compraPago.valor = pago.valor;
-            await this.compraPagoService.insert(compraPago);
+            await this.compraPagoDao.insert(compraPago);
         });
 
         return compraCliente;
     }
 
-    @Get(":idCompra")
-    async findCompraClienteById(@Param('idCompra') idCompra: number): Promise<CompraClienteInDTO> {
-        const compraEntity: CompraEntity = await this.compraService.findByPk(idCompra);
-        const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleService.findByIdCompra(idCompra);
-        const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoService.findByIdCompra(idCompra);
+    async findCompraClienteById(idCompra: number): Promise<CompraClienteInDTO> {
+        const compraEntity: CompraEntity = await this.compraDao.findByPk(idCompra);
+        const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(idCompra);
+        const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoDao.findByIdCompra(idCompra);
         const cliente = await this.clienteService.findByPk(compraEntity.idCliente);
 
         const compraClienteInDTO: CompraClienteInDTO = new CompraClienteInDTO();
@@ -174,16 +169,15 @@ export class CompraController {
         return compraClienteInDTO;
     }
 
-    @Post("resumen-compras")
-    async findResumenCompras(@Body() resumenComprasInDTO: ResumenComprasInDTO): Promise<Array<CompraClienteOutDTO>> {
-        const listaCompras: Array<CompraEntity> = await this.compraService.findAll();
+    async findResumenCompras(resumenComprasInDTO: ResumenComprasInDTO): Promise<CompraClienteOutDTO[]> {
+        const listaCompras: Array<CompraEntity> = await this.compraDao.findAll();
         const listaCompraClienteInDTO: Array<CompraClienteOutDTO> = [];
 
         for await (const compra of listaCompras) {
             const compraClienteOutDTO: CompraClienteOutDTO = new CompraClienteOutDTO();
             compraClienteOutDTO.compra = compra;
-            const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleService.findByIdCompra(compra.idCompra);
-            const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoService.findByIdCompra(compra.idCompra);
+            const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(compra.idCompra);
+            const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoDao.findByIdCompra(compra.idCompra);
             const cliente = await this.clienteService.findByPk(compra.idCliente);
 
             // Mapeamos el dto

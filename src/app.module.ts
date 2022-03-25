@@ -22,6 +22,12 @@ import { ReporteModule } from '@reportes/reporte.module';
 
 @Module({
   imports: [
+    //Administración de entidades debería hacerce solo en cada modulo encargado de la entidad
+    CommonModule,
+    ProductoModule,
+    CompraClienteModule,
+    ReporteModule,
+
     TypeOrmModule.forRoot(
       {
         // type: "sqlite", //https://github.com/nestjs/typeorm/issues/66
@@ -43,19 +49,13 @@ import { ReporteModule } from '@reportes/reporte.module';
         ],
         synchronize: false
       }),
+
     TypeOrmModule.forFeature([
       // Common
       ClienteEntity,
       // Productos
       ProductoEntity, TipoCategoriaProductoEntity,
-      // Compras cliente
-      TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity
     ]),
-    //Administración de entidades debería hacerce solo en cada modulo encargado de la entidad
-    CommonModule,
-    ProductoModule,
-    CompraClienteModule,
-    ReporteModule,
   ],
   controllers: [],
   providers: [],

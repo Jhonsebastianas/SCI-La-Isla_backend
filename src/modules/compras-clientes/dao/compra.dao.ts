@@ -1,19 +1,24 @@
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 
 /**
- * @createAt 08/11/2021, 11:30 p.m.
- * @author jhonsebastianas.com
+ * Interface encargada de la capa de datos de compra. <br>
+ * @createAt 2022-03-24, 23:53:43
+ * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
  */
-export interface CompraService {
+export interface CompraDao {
 
     /**
      * Método para registrar una compra.
+     * @createAt 03/02/2022, 09:59 p.m.
+     * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
      * @param {CompraEntity} compra entidad compra.
      */
     insert(compra: CompraEntity): Promise<CompraEntity>;
 
     /**
      * Método para actualizar una compra.
+     * @createAt 03/02/2022, 09:59 p.m.
+     * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
      * @param {CompraEntity} compra entidad compra.
      */
     update(compra: CompraEntity): Promise<CompraEntity>;
@@ -21,12 +26,15 @@ export interface CompraService {
     /**
      * Método encargado de eliminar una compra.
      * @createAt 03/02/2022, 09:59 p.m.
+     * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
      * @param {number | Array<number>} idsCompra iidentificador PK, de la compra.
      */
     delete(idsCompra: number | Array<number>): Promise<void>;
 
     /**
      * Método para encontrar una compra por id.
+     * @createAt 03/02/2022, 09:59 p.m.
+     * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
      * @param {number} idCompra identificador PK, de la compra.
      */
     findByPk(idCompra: number): Promise<CompraEntity>;
@@ -34,6 +42,7 @@ export interface CompraService {
     /**
      * Método para recuperar las compras y sus detalles
      * @ceateAt 03/02/2022, 02:46 p.m.
+     * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
      */
     findAll(): Promise<Array<CompraEntity>>;
 

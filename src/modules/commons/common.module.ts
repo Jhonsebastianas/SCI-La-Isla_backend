@@ -12,7 +12,7 @@ import { ClienteController } from '@commons/controllers/cliente.controller';
     ],
     providers: [ClienteServiceImpl],
     controllers: [ClienteController],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, ClienteServiceImpl],
 })
 
 export class CommonModule { }

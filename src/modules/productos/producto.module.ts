@@ -17,7 +17,7 @@ import { CategoriaProductoController } from "./controllers/tipo.categoria.produc
     ],
     providers: [ProductoServiceImpl, CategoriaProductoServiceImpl],
     controllers: [ProductoController, CategoriaProductoController],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, ProductoServiceImpl, CategoriaProductoServiceImpl],
 })
 
 export class ProductoModule { }
