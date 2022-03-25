@@ -1,4 +1,5 @@
-import { ParamException } from "@config/exceptions/maganer.exception";
+
+import { ParamException } from "@conf/exceptions/maganer.exception";
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";

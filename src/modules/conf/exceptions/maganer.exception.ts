@@ -50,10 +50,16 @@ export class AuthException extends ManagerException {
     }
 }
 
+export class ConflictException extends ManagerException {
+    constructor(message: string = 'conflict', detail?: string) {
+        super(HttpStatus.CONFLICT, message, detail);
+    }
+}
+
 /**
  * Permission exception
  */
- export class UnexpectedException  extends ManagerException {
+export class UnexpectedException extends ManagerException {
     constructor(message: string = 'internal error', detail?: string) {
         super(HttpStatus.INTERNAL_SERVER_ERROR, message, detail);
     }

@@ -1,6 +1,5 @@
 import { MagicNumber } from '@commons/util/constantes';
-import { NoResultException, UnexpectedException } from "@config/exceptions/maganer.exception";
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { NoResultException, UnexpectedException } from '@conf/exceptions/maganer.exception';
 import { InjectEntityManager } from "@nestjs/typeorm";
 import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
 import { ProductoEntity } from "@productos/models/entity/producto.entity";

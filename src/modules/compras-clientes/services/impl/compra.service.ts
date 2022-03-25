@@ -2,7 +2,7 @@ import { CompraService } from "@compras.clientes/services/compra.service";
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { NoResultException } from "@config/exceptions/maganer.exception";
+import { NoResultException } from "@conf/exceptions/maganer.exception";
 
 export class CompraServiceImpl implements CompraService {
     constructor(@InjectRepository(CompraEntity)

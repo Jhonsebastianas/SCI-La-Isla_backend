@@ -2,9 +2,9 @@ import { ClienteInDTO } from "@commons/models/dto/cliente.in.dto";
 import { ResponseDTO } from "@commons/models/dto/response.dto";
 import { ClienteEntity } from "@commons/models/entity/cliente.entity";
 import { Activo, Datos } from "@commons/util/constantes";
+import { NoResultException, ParamException } from "@conf/exceptions/maganer.exception";
 import { HttpStatus } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
-import { NoResultException, ParamException } from "src/config/exceptions/maganer.exception";
 import { EntityManager } from "typeorm";
 import { ClienteService } from "../cliente.services";
 

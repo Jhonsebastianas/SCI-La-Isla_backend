@@ -1,6 +1,6 @@
 import { MagicNumber } from "@commons/util/constantes";
 import { Formats } from "@commons/util/dates.util";
-import { NoResultException } from "@config/exceptions/maganer.exception";
+import { NoResultException } from "@conf/exceptions/maganer.exception";
 import { InjectEntityManager } from "@nestjs/typeorm";
 import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 import { ProductoMasVendidoDTO } from "@reportes/models/dto/producto.mas.vendido.dto";

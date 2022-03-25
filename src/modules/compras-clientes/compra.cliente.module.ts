@@ -19,6 +19,8 @@ import { CompraPagoServiceImpl } from "./services/impl/compra.pago.service.impl"
 // Compra detalle
 import { CompraDetalleEntity } from "./models/entity/compra.detalle.entity";
 import { CompraDetalleServiceImpl } from "./services/impl/compra.detalle.service.impl";
+import { TipoFormaPagoDaoImpl } from "./dao/impl/tipo.forma.pago.dao.impl";
+import { TipoFormaPagoManagerImpl } from "./manager/impl/tipo.forma.pago.manager.impl";
 
 @Module({
     imports: [
@@ -30,10 +32,11 @@ import { CompraDetalleServiceImpl } from "./services/impl/compra.detalle.service
         // Producto
         ProductoServiceImpl,
         // Compras
-        FormaPagoServiceImpl, CompraDetalleServiceImpl, CompraPagoServiceImpl, CompraServiceImpl
+        FormaPagoServiceImpl, CompraDetalleServiceImpl, CompraPagoServiceImpl, CompraServiceImpl,
+        TipoFormaPagoDaoImpl, TipoFormaPagoManagerImpl
     ],
     controllers: [FormaPagoController, CompraController],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, TipoFormaPagoDaoImpl, TipoFormaPagoManagerImpl],
 })
 
 export class CompraClienteModule { }
