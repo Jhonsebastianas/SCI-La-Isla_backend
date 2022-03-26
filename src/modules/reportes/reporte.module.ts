@@ -1,15 +1,16 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ReporteProductoController } from "./controllers/reportes.producto.controller";
-import { ReporteProductoServiceImpl } from "./services/impl/reporte.producto.service.impl";
+import { ReporteProductoDaoImpl } from "./dao/impl/reporte.producto.dao.impl";
+import { ReporteProductoManagerImpl } from "./manager/impl/reporte.producto.manager.impl";
+import { ReporteProductoService } from "./services/reportes.producto.service";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([]),
     ],
-    providers: [ReporteProductoServiceImpl],
-    controllers: [ReporteProductoController],
-    exports: [TypeOrmModule, ReporteProductoServiceImpl],
+    providers: [ReporteProductoDaoImpl, ReporteProductoManagerImpl],
+    controllers: [ReporteProductoService],
+    exports: [TypeOrmModule, ReporteProductoDaoImpl, ReporteProductoManagerImpl],
 })
 
 export class ReporteModule { }

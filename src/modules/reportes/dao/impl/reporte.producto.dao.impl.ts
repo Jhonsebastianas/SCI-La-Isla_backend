@@ -1,17 +1,17 @@
-import { MagicNumber } from "@commons/util/constantes";
 import { Formats } from "@commons/util/dates.util";
-import { NoResultException } from "@conf/exceptions/maganer.exception";
+import { Injectable } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
 import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 import { ProductoMasVendidoDTO } from "@reportes/models/dto/producto.mas.vendido.dto";
 import { EntityManager } from "typeorm";
-import { ReporteProductoService } from "../reporte.producto.service";
+import { ReporteProductoDao } from "../reporte.producto.dao";
 
-export class ReporteProductoServiceImpl implements ReporteProductoService {
+@Injectable()
+export class ReporteProductoDaoImpl implements ReporteProductoDao {
 
-    constructor(
-        @InjectEntityManager() private entityManager: EntityManager
-    ) { }
+    constructor(@InjectEntityManager()
+    private entityManager: EntityManager) { }
+
 
     async findMasVendidos(filtros?: FiltroGeneralDTO): Promise<ProductoMasVendidoDTO[]> {
         const params = [];
@@ -46,15 +46,6 @@ export class ReporteProductoServiceImpl implements ReporteProductoService {
         return productosMasVendidos;
     }
 
-    async findEstadisticasProducto(filtros: FiltroGeneralDTO): Promise<ProductoMasVendidoDTO> {
-        const estadisticas = await this.findMasVendidos(filtros);
-        const estadisticaProducto = estadisticas[MagicNumber.CERO];
-        if (!estadisticaProducto) {
-            throw new NoResultException('No se encontraron estadísticas para el producto seleccionado.');
-        }
-        return estadisticaProducto;
-    }
-
     async applyGeneralFiltres(sql: string, params: any[], filtros?: FiltroGeneralDTO): Promise<string> {
         let hasWhere = false;
         if (filtros.idProducto) {
@@ -81,5 +72,4 @@ export class ReporteProductoServiceImpl implements ReporteProductoService {
         params.push(filtros.cantidadResultados || 1);
         return sql;
     }
-
 }
