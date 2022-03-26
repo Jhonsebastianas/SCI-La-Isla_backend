@@ -9,7 +9,7 @@ import { ReporteProductoServiceImpl } from "./services/impl/reporte.producto.ser
     ],
     providers: [ReporteProductoServiceImpl],
     controllers: [ReporteProductoController],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, ReporteProductoServiceImpl],
 })
 
 export class ReporteModule { }

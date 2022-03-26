@@ -49,13 +49,6 @@ import { ReporteModule } from '@reportes/reporte.module';
         ],
         synchronize: false
       }),
-
-    TypeOrmModule.forFeature([
-      // Common
-      ClienteEntity,
-      // Productos
-      ProductoEntity, TipoCategoriaProductoEntity,
-    ]),
   ],
   controllers: [],
   providers: [],
