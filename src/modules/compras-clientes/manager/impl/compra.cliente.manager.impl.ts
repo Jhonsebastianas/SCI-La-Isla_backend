@@ -1,7 +1,7 @@
+import { ClienteManagerImpl } from "@commons/manager/impl/cliente.manager.impl";
 import { ClienteIdentificacionDTO } from "@commons/models/dto/cliente.identificacion.dto";
 import { IdentificacionDTO } from "@commons/models/dto/identificacion.dto";
 import { ClienteEntity } from "@commons/models/entity/cliente.entity";
-import { ClienteServiceImpl } from "@commons/services/impl/cliente.service.impl";
 import { CompraDaoImpl } from "@compras.clientes/dao/impl/compra.dao.impl";
 import { CompraDetalleDaoimpl } from "@compras.clientes/dao/impl/compra.detalle.dao.impl";
 import { CompraPagoDaoImpl } from "@compras.clientes/dao/impl/compra.pago.dao.impl";
@@ -25,13 +25,13 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
         private compraDao: CompraDaoImpl,
         private compraDetalleDao: CompraDetalleDaoimpl,
         private compraPagoDao: CompraPagoDaoImpl,
-        private clienteService: ClienteServiceImpl,
+        private clienteManager: ClienteManagerImpl,
         private productoService: ProductoServiceImpl,
     ) { }
 
     async registrarCompraCliente(compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
         // Consultamos al cliente
-        const cliente = await this.clienteService.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
+        const cliente = await this.clienteManager.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
 
         let compraEntity = new CompraEntity();
         compraEntity.fechaCompra = new Date();
@@ -84,7 +84,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
     }
 
     async actualizarCompraCliente(idCompra: number, compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
-        const cliente: ClienteEntity = await this.clienteService.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
+        const cliente: ClienteEntity = await this.clienteManager.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
         let compraEntity: CompraEntity = await this.compraDao.findByPk(idCompra);
         compraEntity.idCliente = cliente.idCliente;
         compraEntity.valorTotal = compraCliente.productos
@@ -132,7 +132,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
         const compraEntity: CompraEntity = await this.compraDao.findByPk(idCompra);
         const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(idCompra);
         const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoDao.findByIdCompra(idCompra);
-        const cliente = await this.clienteService.findByPk(compraEntity.idCliente);
+        const cliente = await this.clienteManager.findByPk(compraEntity.idCliente);
 
         const compraClienteInDTO: CompraClienteInDTO = new CompraClienteInDTO();
         // Mapeamos el dto
@@ -178,7 +178,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
             compraClienteOutDTO.compra = compra;
             const listaDetalles: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(compra.idCompra);
             const listaCompraPagos: Array<CompraPagoEntity> = await this.compraPagoDao.findByIdCompra(compra.idCompra);
-            const cliente = await this.clienteService.findByPk(compra.idCliente);
+            const cliente = await this.clienteManager.findByPk(compra.idCliente);
 
             // Mapeamos el dto
             compraClienteOutDTO.productos = [];
