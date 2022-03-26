@@ -1,28 +1,33 @@
-import { MagicNumber } from '@commons/util/constantes';
-import { NoResultException, UnexpectedException } from '@conf/exceptions/maganer.exception';
+import { NoResultException } from "@conf/exceptions/maganer.exception";
+import { Injectable } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
 import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
 import { ProductoEntity } from "@productos/models/entity/producto.entity";
-import { ProductoService } from "@productos/services/producto.services";
+import { MagicNumber } from "@utils/constantes";
 import { EntityManager } from "typeorm";
+import { ProductoDao } from "../producto.dao";
 
 /**
- * Servicio encargado de la lógica de negocio y capa de datos.
+ * Claseencargada de la capa dedatos de los productos. <br>
+ * @createAt 2022-03-25, 20:50:21 <br>
+ * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
  */
-export class ProductoServiceImpl implements ProductoService {
+@Injectable()
+export class ProductoDaoImpl implements ProductoDao {
 
     constructor(@InjectEntityManager()
     private entityManager: EntityManager) { }
 
     async insert(producto: ProductoEntity): Promise<ProductoEntity> {
-        const newProduct = new ProductoEntity();
-        Object.assign(newProduct, producto);
-
-        return await this.entityManager.save(newProduct);
+        return await this.entityManager.save(producto);
     }
 
     async update(producto: ProductoEntity): Promise<ProductoEntity> {
         return await this.entityManager.save(producto);
+    }
+
+    async findByPk(idProducto: number): Promise<ProductoEntity> {
+        return await this.entityManager.findOne<ProductoEntity>(ProductoEntity, idProducto);
     }
 
     async findAll(): Promise<DetalleProductoOutDTO[]> {
@@ -74,26 +79,6 @@ export class ProductoServiceImpl implements ProductoService {
             throw new NoResultException(`El producto con nombre parcial ${nombre} no existe`);
         }
         return detalle;
-    }
-
-    async updateStockProductoVendido(idProducto: number, cantidadProductoVendido: number): Promise<void> {
-        try {
-            const producto: ProductoEntity = await this.entityManager.findByIds(ProductoEntity, [idProducto]).then(productos => productos[MagicNumber.CERO]);
-            producto.stock = (cantidadProductoVendido > producto.stock) ? MagicNumber.CERO : (producto.stock - cantidadProductoVendido);
-            this.update(producto);
-        } catch (error) {
-            throw new UnexpectedException(`No se pudo actualizar el stock del producto con id ${idProducto}`, error);
-        }
-    }
-
-    async updateStockProductoDevuelto(idProducto: number, cantidadProductoDevuelto: number): Promise<void> {
-        try {
-            const producto: ProductoEntity = await this.entityManager.findByIds(ProductoEntity, [idProducto]).then(productos => productos[MagicNumber.CERO]);
-            producto.stock = producto.stock + cantidadProductoDevuelto;
-            this.update(producto);
-        } catch (error) {
-            throw new UnexpectedException(`No se pudo actualizar el stock del producto con id ${idProducto}`, error);
-        }
     }
 
 }

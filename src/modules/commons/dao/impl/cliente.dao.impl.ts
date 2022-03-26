@@ -1,6 +1,9 @@
 import { ClienteEntity } from "@commons/models/entity/cliente.entity";
+import { NoResultException } from "@conf/exceptions/maganer.exception";
 import { Injectable } from "@nestjs/common";
 import { InjectEntityManager } from "@nestjs/typeorm";
+import { MagicNumber } from "@utils/constantes";
+import { JsUtil } from "@utils/util/JsUtil";
 import { EntityManager } from "typeorm";
 import { ClienteDao } from "../cliente.dao";
 
@@ -27,10 +30,16 @@ export class ClienteDaoImpl implements ClienteDao {
         return await this.entityManager.findOne<ClienteEntity>(ClienteEntity, idCliente);
     }
 
-    async findByIdentificacion(tipoIdentificacion: number, numeroIdentificacion: string): Promise<ClienteEntity> {
-        return await this.entityManager.findOne(ClienteEntity,
-            { idTipoIdentificacion: tipoIdentificacion, numeroIdentificacion }
-        );
+    async findByIdentificacion(idTipoIdentificacion: number, numeroIdentificacion: string): Promise<ClienteEntity> {
+        const cliente = await this.entityManager.find(ClienteEntity, {
+            where: {
+                idTipoIdentificacion, numeroIdentificacion,
+            }
+        })
+        if (JsUtil.isEmptyNull(cliente)) {
+            throw new NoResultException("No se encontro cliente");
+        }
+        return cliente[MagicNumber.CERO];
     }
 
 }

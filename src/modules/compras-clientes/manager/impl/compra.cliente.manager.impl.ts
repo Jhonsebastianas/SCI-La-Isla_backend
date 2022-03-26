@@ -14,8 +14,8 @@ import { CompraDetalleEntity } from "@compras.clientes/models/entity/compra.deta
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
 import { CompraPagoEntity } from "@compras.clientes/models/entity/compra.pago.entity";
 import { Injectable } from "@nestjs/common";
+import { ProductoManagerImpl } from "@productos/manager/impl/producto.manager.impl";
 import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
-import { ProductoServiceImpl } from "@productos/services/impl/producto.services.impl";
 import { MagicNumber } from "@utils/constantes";
 import { CompraClienteManager } from "../compra.cliente.manager";
 
@@ -26,13 +26,12 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
         private compraDetalleDao: CompraDetalleDaoimpl,
         private compraPagoDao: CompraPagoDaoImpl,
         private clienteManager: ClienteManagerImpl,
-        private productoService: ProductoServiceImpl,
+        private productoManager: ProductoManagerImpl,
     ) { }
 
     async registrarCompraCliente(compraCliente: CompraClienteInDTO): Promise<CompraClienteInDTO> {
         // Consultamos al cliente
         const cliente = await this.clienteManager.findByIdentificacion(compraCliente.cliente.idTipoDocumento, compraCliente.cliente.numeroDocumento);
-
         let compraEntity = new CompraEntity();
         compraEntity.fechaCompra = new Date();
         compraEntity.idEmpleado = MagicNumber.UNO;
@@ -49,7 +48,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
             compraDetalleEntity.idProducto = producto.idProducto;
             compraDetalleEntity.valorTotal = producto.valorTotal;
             await this.compraDetalleDao.insert(compraDetalleEntity);
-            await this.productoService.updateStockProductoVendido(producto.idProducto, producto.cantidad);
+            await this.productoManager.updateStockProductoVendido(producto.idProducto, producto.cantidad);
         });
 
         compraCliente.pagos.forEach(async pago => {
@@ -96,7 +95,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
         let listaDetallesAnteriores: Array<CompraDetalleEntity> = await this.compraDetalleDao.findByIdCompra(compraEntity.idCompra);
         // Actualizamos los stocks con los nuevos datos.
         listaDetallesAnteriores.forEach(async detalle => {
-            await this.productoService.updateStockProductoDevuelto(detalle.idProducto, detalle.cantidad);
+            await this.productoManager.updateStockProductoDevuelto(detalle.idProducto, detalle.cantidad);
         });
         // Eliminamos la lista de detalles anteriores.
         await this.compraDetalleDao.delete(listaDetallesAnteriores.map(detalles => detalles.idCompraDetalle));
@@ -109,7 +108,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
             compraDetalleEntity.idProducto = producto.idProducto;
             compraDetalleEntity.valorTotal = producto.valorTotal;
             await this.compraDetalleDao.insert(compraDetalleEntity);
-            await this.productoService.updateStockProductoVendido(producto.idProducto, producto.cantidad);
+            await this.productoManager.updateStockProductoVendido(producto.idProducto, producto.cantidad);
         });
 
         // Buscamos las compra pagos y los eliminamos
@@ -138,7 +137,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
         // Mapeamos el dto
         compraClienteInDTO.productos = [];
         for (const detalle of listaDetalles) {
-            const producto: DetalleProductoOutDTO = await this.productoService.findDetalleProductoById(detalle.idProducto);
+            const producto: DetalleProductoOutDTO = await this.productoManager.findDetalleProductoById(detalle.idProducto);
             const productoCompraDto = new ProductoCompraDTO();
             productoCompraDto.idProducto = detalle.idProducto;
             productoCompraDto.cantidad = detalle.cantidad;
@@ -183,7 +182,7 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
             // Mapeamos el dto
             compraClienteOutDTO.productos = [];
             for (const detalle of listaDetalles) {
-                const producto: DetalleProductoOutDTO = await this.productoService.findDetalleProductoById(detalle.idProducto);
+                const producto: DetalleProductoOutDTO = await this.productoManager.findDetalleProductoById(detalle.idProducto);
                 const productoCompraDto = new ProductoCompraDTO();
                 productoCompraDto.idProducto = detalle.idProducto;
                 productoCompraDto.cantidad = detalle.cantidad;

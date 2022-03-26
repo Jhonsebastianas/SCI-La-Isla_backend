@@ -31,7 +31,9 @@ export class CompraDaoImpl implements CompraDao {
     }
 
     async findAll(): Promise<CompraEntity[]> {
-        return await this.entityManager.find(CompraEntity);
+        return await this.entityManager.find(CompraEntity, {
+            order: { idCompra: 'DESC' }
+        });
     }
 
 }
