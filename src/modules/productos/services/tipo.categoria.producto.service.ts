@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TipoCategoriaProductoManagerImpl } from '@productos/manager/impl/tipo.categoria.producto.manager.impl';
+import { CategoriaRegistrarInDTO } from '@productos/models/dto/categoria.registrar.in.dto';
 import { TipoCategoriaProductoEntity } from '@productos/models/entity/tipo.categoria.producto.entity';
 
 @Controller("categoria-producto")
@@ -9,7 +10,8 @@ export class CategoriaProductoService {
     constructor(private tipoCategoriaProductoManager: TipoCategoriaProductoManagerImpl) { }
 
     @Post("registrar")
-    async registrarCategoriaProducto(@Body() categoriaProducto: TipoCategoriaProductoEntity): Promise<TipoCategoriaProductoEntity> {
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async registrarCategoriaProducto(@Body() categoriaProducto: CategoriaRegistrarInDTO): Promise<TipoCategoriaProductoEntity> {
         return this.tipoCategoriaProductoManager.registrarTipoCategoriaProducto(categoriaProducto);
     }
 

@@ -1,3 +1,4 @@
+import { CategoriaRegistrarInDTO } from "@productos/models/dto/categoria.registrar.in.dto";
 import { TipoCategoriaProductoEntity } from "@productos/models/entity/tipo.categoria.producto.entity";
 
 /**
@@ -11,10 +12,10 @@ export interface TipoCategoriaProductoManager {
      * Método encargado de registrar una categoria. <br>
      * @createAt 2022-03-25, 20:40:13 <br>
      * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
-     * @param {TipoCategoriaProductoEntity} categoriaProducto categoria a registrar.
+     * @param {CategoriaRegistrarInDTO} categoriaProducto categoria a registrar.
      */
-    registrarTipoCategoriaProducto(categoriaProducto: TipoCategoriaProductoEntity): Promise<TipoCategoriaProductoEntity>;
-    
+    registrarTipoCategoriaProducto(categoriaProducto: CategoriaRegistrarInDTO): Promise<TipoCategoriaProductoEntity>;
+
     /**
      * Método encargado de encontrar una categoría de producto por la PK. <br>
      * @createAt 2022-03-25, 20:15:59 <br>
