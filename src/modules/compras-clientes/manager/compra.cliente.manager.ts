@@ -1,6 +1,7 @@
 import { CompraClienteInDTO } from "@compras.clientes/models/dto/compra.cliente.in.dto";
 import { CompraClienteOutDTO } from "@compras.clientes/models/dto/compra.cliente.out.dto";
 import { ResumenComprasInDTO } from "@compras.clientes/models/dto/resumen.compras.in.dto";
+import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 
 /**
  * Interface encargada de la lógica de negocio de las compras del cliente. <br>
@@ -46,7 +47,7 @@ export interface CompraClienteManager {
      * Método encargado de retornar el resumen de muchas compras. <br>
      * @createAt 2022-03-25, 00:18:28
      * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
-     * @param {ResumenComprasInDTO} resumenComprasInDTO 
+     * @param {FiltroGeneralDTO} filtros 
      */
-    findResumenCompras(resumenComprasInDTO: ResumenComprasInDTO): Promise<Array<CompraClienteOutDTO>>;
+    findResumenCompras(filtros: FiltroGeneralDTO): Promise<Array<CompraClienteOutDTO>>;
 }

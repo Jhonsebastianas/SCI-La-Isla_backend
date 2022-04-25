@@ -1,4 +1,5 @@
 import { CompraEntity } from "@compras.clientes/models/entity/compra.entity";
+import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 
 /**
  * Interface encargada de la capa de datos de compra. <br>
@@ -43,7 +44,8 @@ export interface CompraDao {
      * Método para recuperar las compras y sus detalles
      * @ceateAt 03/02/2022, 02:46 p.m.
      * @autor <a href='https://www.jhonsebastianas.com/'>JhonSebastianAS</a>
+     * @param {FiltroGeneralDTO} filtros. (Opcional) filtros opcionales.
      */
-    findAll(): Promise<Array<CompraEntity>>;
+    findAll(filtros?: FiltroGeneralDTO): Promise<Array<CompraEntity>>;
 
 }

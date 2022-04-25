@@ -4,6 +4,7 @@ import { CompraClienteOutDTO } from "@compras.clientes/models/dto/compra.cliente
 import { ResumenComprasInDTO } from "@compras.clientes/models/dto/resumen.compras.in.dto";
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
+import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 
 @Controller("compra-cliente")
 @ApiTags('Compras Cliente')
@@ -33,7 +34,7 @@ export class CompraClienteService {
     }
 
     @Post("resumen-compras")
-    async findResumenCompras(@Body() resumenComprasInDTO: ResumenComprasInDTO): Promise<Array<CompraClienteOutDTO>> {
+    async findResumenCompras(@Body() resumenComprasInDTO: FiltroGeneralDTO): Promise<Array<CompraClienteOutDTO>> {
         return await this.compraClienteManager.findResumenCompras(resumenComprasInDTO);
     }
 

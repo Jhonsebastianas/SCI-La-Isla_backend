@@ -16,6 +16,7 @@ import { CompraPagoEntity } from "@compras.clientes/models/entity/compra.pago.en
 import { Injectable } from "@nestjs/common";
 import { ProductoManagerImpl } from "@productos/manager/impl/producto.manager.impl";
 import { DetalleProductoOutDTO } from "@productos/models/dto/detalle.producto.out.dto";
+import { FiltroGeneralDTO } from "@reportes/models/dto/filtro.general.dto";
 import { MagicNumber } from "@utils/constantes";
 import { CompraClienteManager } from "../compra.cliente.manager";
 
@@ -168,8 +169,8 @@ export class CompraClienteManagerImpl implements CompraClienteManager {
         return compraClienteInDTO;
     }
 
-    async findResumenCompras(resumenComprasInDTO: ResumenComprasInDTO): Promise<CompraClienteOutDTO[]> {
-        const listaCompras: Array<CompraEntity> = await this.compraDao.findAll();
+    async findResumenCompras(filtros: FiltroGeneralDTO): Promise<CompraClienteOutDTO[]> {
+        const listaCompras: Array<CompraEntity> = await this.compraDao.findAll(filtros);
         const listaCompraClienteInDTO: Array<CompraClienteOutDTO> = [];
 
         for await (const compra of listaCompras) {
