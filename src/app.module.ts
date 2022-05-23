@@ -31,13 +31,13 @@ import { ReporteModule } from '@reportes/reporte.module';
     TypeOrmModule.forRoot(
       {
         // type: "sqlite", //https://github.com/nestjs/typeorm/issues/66
-        type: 'oracle',
-        host: 'localhost',
-        port: 1521,
-        username: 'LAISLA',
-        password: '1OuFL@uuuwiI',
-        database: 'db_laisla',
-        sid: 'xe',
+        type: 'postgres',
+        host: 'ec2-34-201-95-176.compute-1.amazonaws.com',
+        port: 5432,
+        username: 'fhtedcajcoukkm',
+        password: '7153e9f51b7c527679efa4eab41542761a2e8b79afa4acf586018592bc4591f8',
+        database: 'dfjtmm918fdama',
+        // sid: 'xe',
         // database: ":memory:", //Indica que es una base de datos en memoria y se reinicia en cada ejecución
         entities: [ // Se definen las entidades va administrar (y las cuales creara como tablas al momento de inicar la app)
           // Common

@@ -59,7 +59,7 @@ export class ReporteProductoDaoImpl implements ReporteProductoDao {
         if (filtros.byFecha) {
             sql = sql.replace("?filtroFecha", `
                 ${hasWhere && 'AND' || 'WHERE'} copra.fecha_compra
-                BETWEEN (TO_DATE(:byFechaInicio, '${Formats.BD_DATE_FORMAT}') - 1) AND (TO_DATE(:byFechaFin, '${Formats.BD_DATE_FORMAT}') + 1)
+                BETWEEN (TO_DATE(:byFechaInicio, '${Formats.BD_DATE_FORMAT}')) AND (TO_DATE(:byFechaFin, '${Formats.BD_DATE_FORMAT}'))
             `);
             params.push(filtros.byFechaInicio);
             params.push(filtros.byFechaFin);
