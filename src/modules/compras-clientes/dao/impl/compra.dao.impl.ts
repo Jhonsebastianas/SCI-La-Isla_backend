@@ -41,14 +41,14 @@ export class CompraDaoImpl implements CompraDao {
         const params = [];
         let sql: string = `
             SELECT
-                co.id_compra    AS "idCompra",
-                co.id_empleado  AS "idEmpleado",
-                co.id_cliente   AS "idCliente",
-                co.fecha_compra AS "fechaCompra",
-                co.valor_total  AS "valorTotal"
-            FROM compra co
+                co."ID_COMPRA"    AS "idCompra",
+                co."ID_EMPLEADO"  AS "idEmpleado",
+                co."ID_CLIENTE"   AS "idCliente",
+                co."FECHA_COMPRA" AS "fechaCompra",
+                co."VALOR_TOTAL"  AS "valorTotal"
+            FROM "COMPRA" co
             ?filtroFecha
-            ORDER BY co.id_compra DESC
+            ORDER BY co."ID_COMPRA" DESC
         `;
         sql = await this.applyGeneralFiltres(sql, params, filtros);
         return await this.entityManager.query(sql, params);
@@ -59,7 +59,7 @@ export class CompraDaoImpl implements CompraDao {
 
         if (filtros?.byFecha) {
             sql = sql.replace("?filtroFecha", `
-                ${hasWhere && 'AND' || 'WHERE'} co.fecha_compra
+                ${hasWhere && 'AND' || 'WHERE'} co."FECHA_COMPRA"
                 BETWEEN (TO_DATE(:byFechaInicio, '${Formats.INPUT_DATE_FORMAT}') - 1) AND (TO_DATE(:byFechaFin, '${Formats.INPUT_DATE_FORMAT}') + 1)
             `);
             params.push(filtros.byFechaInicio);
