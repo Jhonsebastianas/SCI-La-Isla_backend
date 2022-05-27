@@ -37,8 +37,8 @@ export class ProductoDaoImpl implements ProductoDao {
                 pro.nombre AS "nombreProducto", pro.stock AS "stock",
                 pro.precio_compra AS "precioCompra", pro.precio_venta AS "precioVenta",
                 tcp.nombre AS "categoria"
-            FROM producto pro
-            INNER JOIN tipo_categoria_producto tcp ON pro.id_tipo_categoria_producto = tcp.id_tipo_categoria_producto
+            FROM "PRODUCTO" pro
+            INNER JOIN "TIPO_CATEGORIA_PRODUCTO" tcp ON pro.id_tipo_categoria_producto = tcp.id_tipo_categoria_producto
             ORDER BY pro.nombre ASC
         `);
         if (!listaDetalles) {
