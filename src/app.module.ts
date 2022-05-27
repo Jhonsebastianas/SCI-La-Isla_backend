@@ -37,6 +37,7 @@ import { ReporteModule } from '@reportes/reporte.module';
         username: 'fhtedcajcoukkm',
         password: '7153e9f51b7c527679efa4eab41542761a2e8b79afa4acf586018592bc4591f8',
         database: 'dfjtmm918fdama',
+        ssl: true,
         // sid: 'xe',
         // database: ":memory:", //Indica que es una base de datos en memoria y se reinicia en cada ejecución
         entities: [ // Se definen las entidades va administrar (y las cuales creara como tablas al momento de inicar la app)
@@ -47,7 +48,7 @@ import { ReporteModule } from '@reportes/reporte.module';
           // Compras cliente
           TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity
         ],
-        synchronize: false
+        synchronize: true
       }),
   ],
   controllers: [],
