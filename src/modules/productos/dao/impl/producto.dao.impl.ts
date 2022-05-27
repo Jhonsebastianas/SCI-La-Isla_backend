@@ -60,7 +60,7 @@ export class ProductoDaoImpl implements ProductoDao {
                 tcp."NOMBRE" AS "categoria"
             FROM "PRODUCTO" pro
             INNER JOIN "TIPO_CATEGORIA_PRODUCTO" tcp ON pro."ID_TIPO_CATEGORIA_PRODUCTO" = tcp."ID_TIPO_CATEGORIA_PRODUCTO"
-            WHERE pro."ID_PRODUCTO" = :idProducto
+            WHERE pro."ID_PRODUCTO" = $1
         `, [idProducto]).then((detalles => detalles[MagicNumber.CERO]));
         if (!detalle) {
             throw new NoResultException(`El producto con identificación ${idProducto} no existe`);
