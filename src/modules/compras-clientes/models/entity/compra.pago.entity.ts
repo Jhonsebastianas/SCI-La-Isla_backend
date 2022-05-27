@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity("COMPRA_PAGO")
 export class CompraPagoEntity {
 
-    @PrimaryColumn({ name: "ID_COMPRA_PAGO" })
+    @PrimaryGeneratedColumn({ name: "ID_COMPRA_PAGO"})
     idCompraPago: number;
 
     @Column({ name: "ID_COMPRA" })
