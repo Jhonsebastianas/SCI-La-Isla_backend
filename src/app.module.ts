@@ -54,7 +54,7 @@ import { ReporteModule } from '@reportes/reporte.module';
           // Compras cliente
           TipoFormaPagoEntity, CompraEntity, CompraPagoEntity, CompraDetalleEntity
         ],
-        synchronize: true
+        synchronize: false
       }),
   ],
   controllers: [],
