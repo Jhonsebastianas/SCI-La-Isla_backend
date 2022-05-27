@@ -56,11 +56,11 @@ export class CompraDaoImpl implements CompraDao {
 
     async applyGeneralFiltres(sql: string, params: any[], filtros?: FiltroGeneralDTO): Promise<string> {
         let hasWhere = false;
-
+        let index = 1;
         if (filtros?.byFecha) {
             sql = sql.replace("?filtroFecha", `
                 ${hasWhere && 'AND' || 'WHERE'} co."FECHA_COMPRA"
-                BETWEEN (TO_DATE(:byFechaInicio, '${Formats.INPUT_DATE_FORMAT}') - 1) AND (TO_DATE(:byFechaFin, '${Formats.INPUT_DATE_FORMAT}') + 1)
+                BETWEEN (TO_DATE($${index++}, '${Formats.INPUT_DATE_FORMAT}') - 1) AND (TO_DATE($${index++}, '${Formats.INPUT_DATE_FORMAT}') + 1)
             `);
             params.push(filtros.byFechaInicio);
             params.push(filtros.byFechaFin);
